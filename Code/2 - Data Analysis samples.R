@@ -79,7 +79,7 @@ result_data_hand_mouse <- result_data_hand_mouse %>%
 # Create the bar plot
 ggplot(result_data_hand_mouse, aes(x = as.factor(Individuals), y = average_quantity, fill = Hand)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(x = "Operators (Individuals)", y = "Average quantity of DNA (pg)", fill = "Hand") +
+  labs(x = "Operators (Individuals)", y = "Average quantity of DNA (ng)", fill = "Hand") +
   scale_fill_manual(values = c("gray70", "gray30")) +  # Set custom gray shades
   ylim(0,10)+
   theme_bw()
