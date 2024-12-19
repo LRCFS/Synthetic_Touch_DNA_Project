@@ -37,17 +37,60 @@ rm(result_data_hand_trout_Extended)
 
 # Group and summarize data by Individuals and Hand
 result_data_hand_trout <- result_data_hand_trout %>%
-  group_by(Individuals, Hand) %>%
+  group_by(Individuals, Hand, Sebum) %>%
   summarise(average_quantity = mean(average_quantity_total, na.rm = TRUE))
 
+# to separate the different concentrations
+result_data_hand_trout_200 <- result_data_hand_trout %>%
+  filter(grepl("200",Sebum ))
+result_data_hand_trout_300 <- result_data_hand_trout %>%
+  filter(grepl("300",Sebum ))
+result_data_hand_trout_400 <- result_data_hand_trout %>%
+  filter(grepl("400",Sebum ))
+
 # Create the bar plot
-ggplot(result_data_hand_trout, aes(x = as.factor(Individuals), y = average_quantity, fill = Hand)) +
+Plot_result_data_hand_trout_200 <- ggplot(result_data_hand_trout_200, aes(x = as.factor(Individuals), y = average_quantity, fill = Hand)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(x = "Operators (Individuals)", y = "Average quantity of DNA (ng)", fill = "Hand") +
   scale_fill_manual(values = c("gray70", "gray30")) +  # Set custom gray shades
-  ylim(0,10)+
+  ylim(0,2.5)+
   theme_bw()
+Plot_result_data_hand_trout_200
 
+Plot_result_data_hand_trout_300 <- ggplot(result_data_hand_trout_300, aes(x = as.factor(Individuals), y = average_quantity, fill = Hand)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(x = "Operators (Individuals)", y = "Average quantity of DNA (ng)", fill = "Hand") +
+  scale_fill_manual(values = c("gray70", "gray30")) +  # Set custom gray shades
+  ylim(0,2.5)+
+  theme_bw()
+Plot_result_data_hand_trout_300
+
+Plot_result_data_hand_trout_400 <- ggplot(result_data_hand_trout_400, aes(x = as.factor(Individuals), y = average_quantity, fill = Hand)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(x = "Operators (Individuals)", y = "Average quantity of DNA (ng)", fill = "Hand") +
+  scale_fill_manual(values = c("gray70", "gray30")) +  # Set custom gray shades
+  ylim(0,2.5)+
+  theme_bw()
+Plot_result_data_hand_trout_400
+
+#### Final graph  #### 
+pCombined_pending <- ggarrange(Plot_result_data_hand_trout_200+ rremove("ylab") + rremove("xlab"),
+                               Plot_result_data_hand_trout_300+ rremove("ylab") + rremove("xlab"),
+                               Plot_result_data_hand_trout_400+ rremove("ylab") + rremove("xlab"),
+                               labels = c("A   ","B   ","C   "),
+                               common.legend = T,legend = "right",
+                               ncol = 1, nrow = 3,
+                               font.label = list(size = 12, color = "black", family = NULL, position = "top"),
+                               hjust=0.5,vjust=1.5)+
+  theme(plot.margin = margin(0.5,1,0.5,1, "cm")) # in order (Top,right,bottom,left)
+pCombined_pending
+
+pCombined_trout <- annotate_figure(pCombined_pending, left = textGrob("Average quantity of DNA (ng)", rot = 90, vjust = 0.5, hjust = 0.5, gp = gpar(cex =1)),
+                               bottom = textGrob("Operators (Individuals)", vjust = 0.5, hjust = 0.5,gp = gpar(cex = 1)))
+pCombined_trout
+
+# to save the graph
+ggsave("Figure 7 - Shedding with manual pressure.png", pCombinedHP, width =8, height = 7, units = "in", dpi=600,path = "Results")
 #### Mouse ####
 # Calculate the average of Quantity_Total for each duplicate in Sample Name
 data_hand_mouse <- data_hand_mouse %>%

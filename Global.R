@@ -57,7 +57,7 @@ source("Functions/SearchAndReplace.R")
 #############################################################
 
 # where the generated figures are saved, create folder if not existing
-# dir.create(Results.dir, recursive = TRUE)# will create folder if not already there.
+dir.create(Results.dir, recursive = TRUE)# will create folder if not already there.
 Results.dir <- "Results/"
 
 #############################################################
