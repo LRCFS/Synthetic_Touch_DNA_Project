@@ -47,16 +47,31 @@ library(readxl) #Library to read .xls files
 library(rstatix)
 
 #############################################################
+#####                   Functions                       #####
+#############################################################
+
+# Custom averaging function
+custom_average <- function(values) {
+  values <- na.omit(values)
+  if (length(values) == 1) return(values)
+  if (all(values == 0)) return(0)
+  non_zero <- values[values != 0]
+  mean(non_zero)
+}
+
+source("Functions/SearchAndReplace.R")
+
+#############################################################
 #####                Folder & Files                     #####
 #############################################################
 
 # where the generated figures are saved, create folder if not existing
-dir.create(Results.dir, recursive = TRUE)# will create folder if not already there.
-Results.dir <- "Results/"
+# dir.create(Results.dir, recursive = TRUE)# will create folder if not already there.
+# Results.dir <- "Results/"
 
 #############################################################
 #####                       Codes                       #####
 #############################################################
 # This codes can be run subsequently
-#source("Code/1 - Data upload.R")
+source("Code/1 - Data upload.R")
 

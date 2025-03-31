@@ -46,9 +46,7 @@ Data <- sorted_data %>%
   filter(Task != "STANDARD" & Task != "NTC")
 
 # Updated calculation for Quantity_Total based on Study volumes
-factor_lookup <- c("Poetsch" = 50, "Fonneløp" = 50, "Goray" = 100, 
-                   "Thomasma" = 100, "ThomasmaSDS" = 10, "Meakin" = 10, 
-                   "Daly" = 10, "Lim" = 100)
+factor_lookup <- c("Poetsch" = 50, "Thomasma" = 1, "Fonnelop" = 50, "Goray" = 100, "Meakin" = 10, "Daly" = 10, "Lim" = 100)
 
 Data <- Data %>%
   mutate(Factor = factor_lookup[Study]) %>%
