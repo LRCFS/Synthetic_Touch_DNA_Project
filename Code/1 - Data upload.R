@@ -30,12 +30,17 @@ for (file in file_list) {
 # Combine all dataframes in the list into one dataframe using bind_rows
 merged_data <- bind_rows(df_list)
 
+# Replace names of Samples
+CorrectionSample <- read.csv("CorrectionLists/SampleNameCorrected.txt", sep = "\t", header = TRUE)
+CorrectionSample <- as.data.frame(CorrectionSample)
+merged_data$`Sample Name corrected` <- gsr(as.character(merged_data$`Sample Name`),as.character(CorrectionSample$Name),as.character(CorrectionSample$NameCorrected))
+
 # Sort the data by the 'Sample Name' column
-sorted_filtered_data <- merged_data %>% arrange(`Sample Name`)
+sorted_filtered_data <- merged_data %>% arrange(`Sample Name corrected`)
 
 # Select the columns of interest
 sorted_data <- sorted_filtered_data %>%
-  select("Well", "Cт", `Sample Name`, `Target Name`, "Quantity", "Task", "Study")
+  select(`Sample Name`,`Sample Name corrected`,"Well", "Cт", `Target Name`, "Quantity", "Task", "Study")
 
 # Create a new dataframe for rows with "STANDARD" in the Task column
 Standard <- sorted_data %>%
@@ -46,7 +51,7 @@ Data <- sorted_data %>%
   filter(Task != "STANDARD" & Task != "NTC")
 
 # Updated calculation for Quantity_Total based on Study volumes
-factor_lookup <- c("Poetsch" = 50, "Thomasma" = 1, "Fonnelop" = 50, "Goray" = 100, "Meakin" = 10, "Daly" = 10, "Lim" = 100)
+factor_lookup <- c("Poetsch" = 50, "Thomasma" = 50, "Fonnelop" = 50, "Goray" = 50, "Meakin" = 10, "Daly" = 10, "Lim" = 50, "Bowman" = 50)
 
 Data <- Data %>%
   mutate(Factor = factor_lookup[Study]) %>%
