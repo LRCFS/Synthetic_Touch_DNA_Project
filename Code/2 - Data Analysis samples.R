@@ -17,14 +17,14 @@ Data <- Data %>%
 data_by_study <- split(Data, Data$Study)
 
 # Extract them individually as named dataframes
-Poetsch_data <- data_by_study[["Poetsch"]]
-Fonnelop_data <- data_by_study[["Fonnelop"]]
-Goray_data <- data_by_study[["Goray"]]
-Thomasma_data <- data_by_study[["Thomasma"]]
-Thomasma_data$Quantity_Total_pgul <- ((Thomasma_data$Quantity_Total)/5)*1000 # 5ul for the PCR and 1000 to convert ng to pg
-Meakin_data <- data_by_study[["Meakin"]]
-Daly_data <- data_by_study[["Daly"]]
-Lim_data <- data_by_study[["Lim"]]
+Poetsch_repeat <- data_by_study[["Poetsch"]]
+Fonnelop_repeat <- data_by_study[["Fonnelop"]]
+Goray_repeat <- data_by_study[["Goray"]]
+Thomasma_repeat <- data_by_study[["Thomasma"]]
+Thomasma_repeat$Quantity_Total_pgul <- ((Thomasma_repeat$Quantity_Total)/5)*1000 # 5ul for the PCR and 1000 to convert ng to pg
+Meakin_repeat <- data_by_study[["Meakin"]]
+Daly_repeat <- data_by_study[["Daly"]]
+Lim_repeat <- data_by_study[["Lim"]]
 
 # ------------------------------------------------------------------------
 # Section 2: Poetsch et al.
@@ -41,14 +41,18 @@ Poetsch_data$Age_Group <- factor(Poetsch_data$Age_Group, levels = c(
 
 # Plot
 plot_Poetsch_data <- ggplot(Poetsch_data, aes(x = Age_Group, y = DNA_qt)) +
-  geom_bar(stat = "identity", fill = "#6BAED6", colour = "black", width = 0.7) +
+  geom_bar(stat = "identity", fill = "#C6DBEF", colour = "black", width = 0.7) +
   geom_errorbar(aes(ymin = DNA_qt, ymax = DNA_qt + Error), width = 0.3) +
   scale_y_continuous(
-    breaks = seq(0, 6, by = 0.5),   # Set ticks from 1 to 6 every 0.5
+    limits = c(0, 5),
+    breaks = seq(0, 5, by = 0.5),
     expand = expansion(mult = c(0, 0.05))) +
   theme_bw() +
   labs(x = "Age Group",y = "DNA Quantity (ng)") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+  theme(text = element_text(family = "Arial", size = 14),  # Set overall font
+        axis.title = element_text(size = 14),              # Axis title font size
+        axis.text = element_text(size = 12),               # Axis tick labels
+        axis.text.x = element_text(angle = 45, hjust = 1),
         panel.grid.minor = element_blank())
 
 # Show plot
@@ -56,92 +60,109 @@ plot_Poetsch_data
 
 #### Repeated data with Proxy ####
 # Remove rows with unused data
-Poetsch_data <- Poetsch_data %>%
+Poetsch_repeat <- Poetsch_repeat %>%
   filter(`Sample Name` != "LH" & `Sample Name` != "LH_1" & `Sample Name` != "LH_2"
          & `Sample Name` != "RH" & `Sample Name` != "RH_1" & `Sample Name` != "RH_2"
          & `Sample Name` != "C")
 
 # Select the columns of interest
-Poetsch_data <- Poetsch_data %>%
+Poetsch_repeat <- Poetsch_repeat %>%
   select(`Sample Name`=`Sample Name corrected`, `Target Name`, "Quantity_Total","Study")
 
 # First, split 'Sample Name' into Participant, Repeat, and Hand
-Poetsch_data_intermediate <- Poetsch_data %>%
-  separate(`Sample Name`, into = c("Study", "Operator","Concentration", "Hand"), sep = "_", remove = FALSE) %>%
+Poetsch_data_intermediate <- Poetsch_repeat %>%
+  separate(`Sample Name`, into = c("Study", "Operator","Concentration", "Hand", "Repeat"), sep = "_", remove = FALSE) %>%
   mutate(Study = paste0(Study)) %>%
-  select(Study, Operator, Concentration, Hand, `Target Name`, Quantity_Total)
+  select(Study, Operator, Concentration, Hand,Repeat, `Target Name`, Quantity_Total)
 
 #Apply averaging explicitly outside of main pipeline
 Poetsch_data_averaged <- Poetsch_data_intermediate %>%
-  group_by(Study, Operator, Concentration, Hand, `Target Name`) %>%
+  group_by(Study, Operator, Concentration, Hand, `Target Name`, Repeat) %>%
   summarise(Total_Quantity = custom_average(Quantity_Total), .groups = 'drop')
 
-# Pivot wider to obtain final format
-Poetsch_data <- Poetsch_data_averaged %>%
-  pivot_wider(names_from = c(`Target Name`, Hand),values_from = Total_Quantity,names_sep = "_") %>%
-  rename("Cell_free_L" = `TROUT 2_L`,"Cell_free_R" = `TROUT 2_R`,"Cell_DNA_L" = Mouse_L,"Cell_DNA_R" = Mouse_R) %>%
-  arrange(Study)
+# Rename Target Name values
+Poetsch_data_renamed <- Poetsch_data_averaged %>%
+  mutate(`Target Name` = recode(`Target Name`,
+                                "Mouse" = "Cell_DNA",
+                                "TROUT 2" = "Cell_free_DNA"))
 
-# Calculate total DNA (Cell DNA + Cell-free DNA)
-# treating NA values as 0
-Poetsch_data_total <- Poetsch_data %>%
-  mutate(Total_L = rowSums(cbind(Cell_free_L, Cell_DNA_L), na.rm = TRUE),
-         Total_R = rowSums(cbind(Cell_free_R, Cell_DNA_R), na.rm = TRUE))
+# Rename Concentration values
+Poetsch_data_renamed <- Poetsch_data_renamed %>%
+  mutate(Concentration = recode(Concentration,
+                                "L" = "Low",
+                                "A" = "Average",
+                                "H" = "High",))
 
-# Compute descriptive statistics clearly
-descriptive_stats <- Poetsch_data_total %>%
-  pivot_longer(cols = c(Total_L, Total_R),names_to = "Hand",values_to = "Total_DNA") %>%
-  group_by(Hand) %>%
-  summarise(
-    Mean = mean(Total_DNA, na.rm = TRUE),
-    SD = sd(Total_DNA, na.rm = TRUE),
-    Median = median(Total_DNA, na.rm = TRUE),
-    Min = min(Total_DNA, na.rm = TRUE),
-    Max = max(Total_DNA, na.rm = TRUE),
-    .groups = 'drop'
+# Calculate total DNA quantity per row per hand
+Poetsch_data_with_total <- Poetsch_data_renamed %>%
+  pivot_wider(names_from = `Target Name`, values_from = Total_Quantity) %>%
+  mutate(
+    Cell_DNA = replace_na(Cell_DNA, 0),
+    Cell_free_DNA = replace_na(Cell_free_DNA, 0),
+    Total_DNA = Cell_DNA + Cell_free_DNA
   )
-# View results
-print(descriptive_stats)
 
-# Reshape the data into long format (raw values)
-Poetsch_data_our_study <- Poetsch_data_total %>%
-  pivot_longer(cols = c(Total_L, Total_R),
-               names_to = "Hand", values_to = "Total_DNA") %>%
-  mutate(Study = case_when(Hand == "Total_L" ~ "Proxy DNA – Left hand",Hand == "Total_R" ~ "Proxy DNA – Right hand"))
+# force the x-axis (Concentration) to appear in the order Low, Average, High instead of alphabetical (A, H, L)
+Poetsch_data_with_total <- Poetsch_data_with_total %>%
+  mutate(Concentration = factor(Concentration, levels = c("Low", "Average", "High")))
 
-# Create a dummy entry for the other study
-Poetsch_study_data <- tibble(
-  Study = "Poetsch et al.",
-  Total_DNA = NA_real_,
-  Min = 0,
-  Max = 4.8
+# Plot repeated data
+plot_Poetsch_repeat <- Poetsch_data_with_total %>%
+  ggplot(aes(x = Concentration, y = Total_DNA)) +
+  stat_summary(fun = mean, geom = "bar", fill = "#C6DBEF", colour = "black", width = 0.7) +
+  stat_summary(fun.data = function(x) {
+    mean_val <- mean(x, na.rm = TRUE)
+    sd_val <- sd(x, na.rm = TRUE)
+    data.frame(y = mean_val, ymin = mean_val, ymax = mean_val + sd_val)
+    },
+    geom = "errorbar", width = 0.2) +
+  labs(y = "DNA Quantity (ng)", x = "Input concentration") +
+  scale_y_continuous(
+    limits = c(0, 5),
+    breaks = seq(0, 5, by = 0.5),
+    expand = expansion(mult = c(0, 0.05))) +
+  theme_bw()+
+  theme(
+    text = element_text(family = "Arial", size = 14),  # Set overall font
+    axis.title = element_text(size = 14),              # Axis title font size
+    axis.text = element_text(size = 12),               # Axis tick labels
+  )
+
+plot_Poetsch_repeat
+
+#### Final plot for article - Figure 1 ####
+# Clean individual plots
+plot_A <- plot_Poetsch_data + 
+  rremove("ylab") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+plot_B <- plot_Poetsch_repeat + 
+  rremove("ylab") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# Combine plots with labels A and B
+pCombined_Poetsch_pending <- ggarrange(plot_A, plot_B,
+                                       labels = c("A", "B"),
+                                       ncol = 2, nrow = 1,
+                                       align = "hv",
+                                       common.legend = FALSE,
+                                       font.label = list(size = 12, color = "black"),
+                                       hjust = -0.5, vjust = 1.2) +
+  theme(plot.margin = margin(0, 0.5, 0, 0, "cm"))  # (Top, Right, Bottom, Left)
+
+# Add shared y-axis label
+pCombined_Poetsch <- annotate_figure(
+  pCombined_Poetsch_pending,
+  left = text_grob("DNA Quantity (ng)", rot = 90, vjust = 0.5, hjust = 0.5, size = 12),
+  bottom = NULL  # You can add shared x-axis here if you want
 )
 
-ggplot() +
-  # Boxplots for your study
-  geom_boxplot(data = Poetsch_data_our_study,
-               aes(x = Study, y = Total_DNA, fill = Study),
-               width = 0.5, outlier.shape = NA, alpha = 0.7) +
-  geom_jitter(data = Poetsch_data_our_study,
-              aes(x = Study, y = Total_DNA),
-              width = 0.15, height = 0, size = 2, color = "black", alpha = 0.6) +
-  
-  # Bar with errorbar for other study
-  geom_bar(data = Poetsch_study_data,
-           aes(x = Study, y = (Min + Max)/2),
-           stat = "identity", fill = "NA", width = 0.5, alpha = 0.8) +
-  geom_errorbar(data = Poetsch_study_data,
-                aes(x = Study, ymin = Min, ymax = Max),
-                width = 0.2, size = 1) +
-  
-  labs(title = "Comparison of DNA transfer",
-       subtitle = "Poetsch et al. study vs. Repeat",
-       y = "DNA quantity (ng)", x = "") +
-  theme_minimal(base_size = 14) +
-  theme(axis.text.x = element_text(angle = 15, hjust = 1),
-        legend.position = "none")
+# Show the combined plot
+pCombined_Poetsch
 
-rm(Poetsch_data_averaged, Poetsch_data_intermediate,Poetsch_data_total,Poetsch_data)
+# Save the figure
+ggsave("./Results/Poetsch_combined_plot.png", pCombined_Poetsch,
+       width = 10, height = 5, dpi = 600, units = "in")
 
 # ------------------------------------------------------------------------
 # Section 2: Fonnelop et al.
@@ -152,114 +173,130 @@ fonnelop_data <- read_csv("./Data/Approximate_fonnelop_dna_quantities.csv") %>%
   rename(Total_DNA = Quantity)
 
 # Plot
-plot_fonnelop_data <- ggplot(fonnelop_data, aes(x = Study, y = Total_DNA, colour = Gender)) +
-  geom_jitter(width = 0.15, size = 2, alpha = 0.7) +
+plot_fonnelop_data <- ggplot(fonnelop_data, aes(x = "Fonnelop <i>et al.</i>", y = Total_DNA)) +
   geom_boxplot(width = 0.3, outlier.shape = NA, colour = "black", fill = NA) +
+  geom_jitter(aes(colour = Gender, shape = Gender), width = 0.15, size = 2, alpha = 0.7) +
   scale_colour_manual(values = c("F" = "grey40", "M" = "steelblue")) +
+  scale_shape_manual(values = c("F" = 16, "M" = 4)) +
   scale_y_continuous(
     breaks = seq(0, 4, by = 0.5),
-    limits = c(0, 4)) +
-  labs(x = NULL,y = "DNA Quantity (ng)") +
+    limits = c(0, 4)
+  ) +
+  labs(x = "\nStudy", y = "DNA Quantity (ng)") +
   theme_bw() +
   theme(
-    legend.position = "right",
-    axis.text.x = element_text(face = "italic"))
+    legend.position = c(0.85, 0.85),
+    legend.background = element_rect(fill = "white", colour = "black", size = 0.7),
+    legend.margin = margin(7,9,7,8),
+    legend.key.size = unit(1.2, "lines"),
+    axis.text.x = element_markdown(family = "Arial", size = 12),
+    text = element_text(family = "Arial", size = 14),
+    axis.title = element_text(size = 14)
+  )
 
 # Show plot
 plot_fonnelop_data
 
 #### Repeated data with Proxy ####
 # Remove rows with unused data
-Fonnelop_data <- Fonnelop_data %>%
+Fonnelop_repeat <- Fonnelop_repeat %>%
   filter(`Sample Name` != "LH_3" & `Sample Name` != "RH_3" & `Sample Name` != "C_2" & `Sample Name` != "C")
 
 # Select the columns of interest
-Fonnelop_data <- Fonnelop_data %>%
+Fonnelop_repeat <- Fonnelop_repeat %>%
   select(`Sample Name`=`Sample Name corrected`, `Target Name`, "Quantity_Total","Study")
 
 # First, split 'Sample Name' into Participant, Repeat, and Hand
-Fonnelop_data_intermediate <- Fonnelop_data %>%
-  separate(`Sample Name`, into = c("Study", "Operator","Concentration", "Hand"), sep = "_", remove = FALSE) %>%
+Fonnelop_data_intermediate <- Fonnelop_repeat %>%
+  separate(`Sample Name`, into = c("Study", "Operator","Concentration", "Hand", "Repeat"), sep = "_", remove = FALSE) %>%
   mutate(Study = paste0(Study)) %>%
-  select(Study, Operator, Concentration, Hand, `Target Name`, Quantity_Total)
+  select(Study, Operator, Concentration, Hand,Repeat, `Target Name`, Quantity_Total)
 
 #Apply averaging explicitly outside of main pipeline
 Fonnelop_data_averaged <- Fonnelop_data_intermediate %>%
-  group_by(Study, Operator, Concentration, Hand, `Target Name`) %>%
+  group_by(Study, Operator, Concentration, Hand, `Target Name`, Repeat) %>%
   summarise(Total_Quantity = custom_average(Quantity_Total), .groups = 'drop')
 
-# Pivot wider to obtain final format
-Fonnelop_data <- Fonnelop_data_averaged %>%
-  pivot_wider(names_from = c(`Target Name`, Hand),values_from = Total_Quantity,names_sep = "_") %>%
-  rename("Cell_free_L" = `TROUT 2_L`,"Cell_free_R" = `TROUT 2_R`,"Cell_DNA_L" = Mouse_L,"Cell_DNA_R" = Mouse_R) %>%
-  arrange(Study)
+# Rename Target Name values
+Fonnelop_data_renamed <- Fonnelop_data_averaged %>%
+  mutate(`Target Name` = recode(`Target Name`,
+                                "Mouse" = "Cell_DNA",
+                                "TROUT 2" = "Cell_free_DNA"))
 
-# Calculate total DNA (Cell DNA + Cell-free DNA)
-# treating NA values as 0
-Fonnelop_data_total <- Fonnelop_data %>%
-  mutate(Total_L = rowSums(cbind(Cell_free_L, Cell_DNA_L), na.rm = TRUE),
-         Total_R = rowSums(cbind(Cell_free_R, Cell_DNA_R), na.rm = TRUE))
+# Rename Concentration values
+Fonnelop_data_renamed <- Fonnelop_data_renamed %>%
+  mutate(Concentration = recode(Concentration,
+                                "L" = "Low",
+                                "A" = "Average",
+                                "H" = "High",))
 
-# Compute descriptive statistics clearly
-descriptive_stats <- Fonnelop_data_total %>%
-  pivot_longer(cols = c(Total_L, Total_R),names_to = "Hand",values_to = "Total_DNA") %>%
-  group_by(Hand) %>%
-  summarise(
-    Mean = mean(Total_DNA, na.rm = TRUE),
-    SD = sd(Total_DNA, na.rm = TRUE),
-    Median = median(Total_DNA, na.rm = TRUE),
-    Min = min(Total_DNA, na.rm = TRUE),
-    Max = max(Total_DNA, na.rm = TRUE),
-    .groups = 'drop'
+# Calculate total DNA quantity per row per hand
+Fonnelop_data_with_total <- Fonnelop_data_renamed %>%
+  pivot_wider(names_from = `Target Name`, values_from = Total_Quantity) %>%
+  mutate(
+    Cell_DNA = replace_na(Cell_DNA, 0),
+    Cell_free_DNA = replace_na(Cell_free_DNA, 0),
+    Total_DNA = Cell_DNA + Cell_free_DNA
   )
-# View results
-print(descriptive_stats)
 
-# Reshape the data into long format (raw values)
-Fonnelop_data_our_study <- Fonnelop_data_total %>%
-  pivot_longer(cols = c(Total_L, Total_R),
-               names_to = "Hand", values_to = "Total_DNA") %>%
-  mutate(Study = case_when(Hand == "Total_L" ~ "Proxy DNA – Left hand",Hand == "Total_R" ~ "Proxy DNA – Right hand"))
+# force the x-axis (Concentration) to appear in the order Low, Average, High instead of alphabetical (A, H, L)
+Fonnelop_data_with_total <- Fonnelop_data_with_total %>%
+  mutate(Concentration = factor(Concentration, levels = c("Low", "Average", "High")))
 
-# Combine real values from Fonnelop with your study values
-fonnelop_study_data <- read_csv("./Data/approximate_fonnelop_dna_quantities.csv") %>%
-  mutate(Study = "Fonnelop et al.") %>%
-  rename(Total_DNA = Quantity)
+# Plot repeated data
+plot_fonnelop_repeat <- ggplot(Fonnelop_data_with_total, aes(x = Concentration, y = Total_DNA, fill = Concentration)) +
+  geom_boxplot(outlier.shape = NA, colour = "black", width = 0.6) +
+  geom_jitter(width = 0.15, size = 2, alpha = 0.8, shape = 21, stroke = 0.3, colour = "black") +
+  scale_fill_manual(values = c("Low" = "#C6DBEF", "Average" = "#6BAED6", "High" = "#2171B5")) +
+  scale_y_continuous(
+    limits = c(0, 4),
+    breaks = seq(0, 4, by = 0.5)
+  ) +
+  labs(x = "\nInput concentration", y = "DNA Quantity (ng)") +
+  theme_bw() +
+  theme(
+    text = element_text(family = "Arial", size = 14),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.position = "none"
+  )
 
-# Combine the two datasets
-combined_data <- bind_rows(
-  fonnelop_study_data %>% select(Study, Total_DNA, Gender, Participant),
-  Fonnelop_data_our_study %>% select(Study, Total_DNA) %>% mutate(Gender = NA, Participant = NA)
+# Show plot
+plot_fonnelop_repeat
+
+#### Final plot for article - Figure 2 ####
+# Clean individual plots
+plot_A <- plot_fonnelop_data + 
+  rremove("ylab") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+plot_B <- plot_fonnelop_repeat + 
+  rremove("ylab") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# Combine plots with labels A and B
+pCombined_Fonnelop_pending <- ggarrange(plot_A, plot_B,
+                                       labels = c("A", "B"),
+                                       ncol = 2, nrow = 1,
+                                       align = "hv",
+                                       common.legend = FALSE,
+                                       font.label = list(size = 12, color = "black"),
+                                       hjust = -0.5, vjust = 1.2) +
+  theme(plot.margin = margin(0, 0.5, 0, 0, "cm"))  # (Top, Right, Bottom, Left)
+
+# Add shared y-axis label
+pCombined_Fonnelop <- annotate_figure(
+  pCombined_Fonnelop_pending,
+  left = text_grob("DNA Quantity (ng)", rot = 90, vjust = 0.5, hjust = 0.5, size = 12),
+  bottom = NULL  # You can add shared x-axis here if you want
 )
 
-# Calculate the average
-# Mean value of 0.64 ng reported in Fonnelop et al. (actual value); 
-# plotted points represent approximated extraction from figure
-combined_data %>%
-  group_by(Study) %>%
-  summarise(
-    Mean_DNA = mean(Total_DNA, na.rm = TRUE),
-    SD_DNA = sd(Total_DNA, na.rm = TRUE),
-    n = sum(!is.na(Total_DNA))
-  )
+# Show the combined plot
+pCombined_Fonnelop
 
-ggplot(combined_data, aes(x = Study, y = Total_DNA)) +
-  geom_boxplot(aes(fill = Study), outlier.shape = NA, alpha = 0.7, width = 0.5, show.legend = FALSE) +
-  geom_jitter(aes(color = Gender), width = 0.15, height = 0, size = 2, alpha = 0.7) +
-  scale_color_manual(values = c("F" = "salmon", "M" = "turquoise"), na.value = "black") +
-  labs(
-    title = "Comparison of DNA transfer",
-    subtitle = "Fonnelop et al. study vs. proxy DNA repeat",
-    y = "DNA quantity (ng)", x = "",
-    color = "Gender"  # ensures legend is labeled clearly
-  ) +
-  theme_minimal(base_size = 14) +
-  theme(
-    axis.text.x = element_text(angle = 15, hjust = 1),
-    legend.position = "right"
-  )
-
-rm(Fonnelop_data_averaged, Fonnelop_data_intermediate,Fonnelop_data_total,Fonnelop_data)
+# Save the figure
+ggsave("./Results/Fonnelop_combined_plot.png", pCombined_Fonnelop,
+       width = 10, height = 5, dpi = 600, units = "in")
 
 # ------------------------------------------------------------------------
 # Section 3: Goray et al.
@@ -279,129 +316,118 @@ plot_Goray_data <- ggplot(Goray_data, aes(x = Hand, y = Total_DNA)) +
   scale_y_continuous(
     breaks = seq(0, 10, by = 2),
     limits = c(0, 10)) +
-  labs(x = "Hand",y = "DNA Quantity (ng)") +
+  labs(x = "\nHand",y = "DNA Quantity (ng)") +
   theme_bw() +
-  theme(axis.text = element_text(size = 10),axis.title = element_text(size = 11))
+  theme(
+    legend.position = c(0.85, 0.85),
+    legend.background = element_rect(fill = "white", colour = "black", size = 0.7),
+    legend.margin = margin(7,9,7,8),
+    legend.key.size = unit(1.2, "lines"),
+    axis.text.x = element_markdown(family = "Arial", size = 12),
+    text = element_text(family = "Arial", size = 14),
+    axis.title = element_text(size = 14)
+  )
 
 # Show plot
 plot_Goray_data
 
 #### Repeated data with Proxy ####
-#### Visualisation ####
 # Select the columns of interest
-Goray_data <- Goray_data %>%
-  select(`Sample Name`, `Target Name`, "Quantity", "Quantity_Total","Study")
+Goray_repeat <- Goray_repeat %>%
+  select(`Sample Name`=`Sample Name corrected`, `Target Name`, "Quantity_Total","Study")
 
 # First, split 'Sample Name' into Participant, Repeat, and Hand
-Goray_data_intermediate <- Goray_data %>%
-  separate(`Sample Name`, into = c("Study", "Repeat", "Hand"), sep = "_", remove = FALSE) %>%
-  mutate(Study = paste0(Study, Repeat)) %>%
-  select(Study, Hand, `Target Name`, Quantity_Total)
+Goray_data_intermediate <- Goray_repeat %>%
+  separate(`Sample Name`, into = c("Study", "Operator","Concentration", "Hand", "Repeat"), sep = "_", remove = FALSE) %>%
+  mutate(Study = paste0(Study)) %>%
+  select(Study, Operator, Concentration, Hand,Repeat, `Target Name`, Quantity_Total)
 
 #Apply averaging explicitly outside of main pipeline
 Goray_data_averaged <- Goray_data_intermediate %>%
-  group_by(Study, Hand, `Target Name`) %>%
+  group_by(Study, Operator, Concentration, Hand, `Target Name`, Repeat) %>%
   summarise(Total_Quantity = custom_average(Quantity_Total), .groups = 'drop')
 
-# Pivot wider to obtain final format
-Goray_data <- Goray_data_averaged %>%
-  pivot_wider(names_from = c(`Target Name`, Hand),values_from = Total_Quantity,names_sep = "_") %>%
-  rename("Cell_free_L" = `TROUT 2_L`,"Cell_free_R" = `TROUT 2_R`,"Cell_DNA_L" = Mouse_L,"Cell_DNA_R" = Mouse_R) %>%
-  arrange(Study)
+# Convert Hand to full labels for clarity
+Goray_data_averaged$Hand <- recode(Goray_data_averaged$Hand, "L" = "Left", "R" = "Right")
 
-# Calculate total DNA (Cell DNA + Cell-free DNA)
-# treating NA values as 0
-Goray_data_total <- Goray_data %>%
-  mutate(Total_L = rowSums(cbind(Cell_free_L, Cell_DNA_L), na.rm = TRUE),
-         Total_R = rowSums(cbind(Cell_free_R, Cell_DNA_R), na.rm = TRUE))
+# Rename Target Name values
+Goray_data_renamed <- Goray_data_averaged %>%
+  mutate(`Target Name` = recode(`Target Name`,
+                                "Mouse" = "Cell_DNA",
+                                "TROUT 2" = "Cell_free_DNA"))
 
-# Reshape the data into long format (raw values)
-Goray_data_our_study <- Goray_data_total %>%
-  pivot_longer(cols = c(Total_L, Total_R),
-               names_to = "Hand", values_to = "Total_DNA") %>%
-  mutate(Study = case_when(Hand == "Total_L" ~ "Proxy DNA",Hand == "Total_R" ~ "Proxy DNA"))
+# Rename Concentration values
+Goray_data_renamed <- Goray_data_renamed %>%
+  mutate(Concentration = recode(Concentration,
+                                "L" = "Low",
+                                "A" = "Average",
+                                "H" = "High",))
 
-# Compute descriptive statistics clearly
-descriptive_stats <- Goray_data_total %>%
-  pivot_longer(cols = c(Total_L, Total_R),names_to = "Hand",values_to = "Total_DNA") %>%
-  group_by(Hand) %>%
-  summarise(
-    Mean = mean(Total_DNA, na.rm = TRUE),
-    SD = sd(Total_DNA, na.rm = TRUE),
-    Median = median(Total_DNA, na.rm = TRUE),
-    Min = min(Total_DNA, na.rm = TRUE),
-    Max = max(Total_DNA, na.rm = TRUE),
-    .groups = 'drop'
+# Calculate total DNA quantity per row per hand
+Goray_data_with_total <- Goray_data_renamed %>%
+  pivot_wider(names_from = `Target Name`, values_from = Total_Quantity) %>%
+  mutate(
+    Cell_DNA = replace_na(Cell_DNA, 0),
+    Cell_free_DNA = replace_na(Cell_free_DNA, 0),
+    Total_DNA = Cell_DNA + Cell_free_DNA
   )
-# View results
-print(descriptive_stats)
 
-# Combine real values from Goray with your study values
-Goray_study_data <- read_csv("./Data/Goray_tidy_data.csv") %>%
-  mutate(Study = "Goray et al.") %>%
-  rename(Total_DNA = Quantity)
+# force the x-axis (Concentration) to appear in the order Low, Average, High instead of alphabetical (A, H, L)
+Goray_data_with_total <- Goray_data_with_total %>%
+  mutate(Concentration = factor(Concentration, levels = c("Low", "Average", "High")))
 
-# Remove one point for visualisation purpose
-Goray_study_data <- Goray_study_data %>%
-  filter(!(Replicate == "D" & Hand == "R" & Day == "3" & Time == 1 & Total_DNA == 38.2))
+# Plot repeated data
+plot_Goray_repeat <- ggplot(Goray_data_with_total, aes(x = Hand, y = Total_DNA)) +
+  geom_boxplot(outlier.shape = NA, colour = "black", width = 0.6) +
+  geom_jitter(width = 0.15, size = 1.8, alpha = 0.6, colour = "grey30") +
+  scale_y_continuous(
+    breaks = seq(0, 10, by = 2),
+    limits = c(0, 10)) +
+  labs(x = "\nHand", y = "DNA Quantity (ng)") +
+  theme_bw() +
+  theme(
+    text = element_text(family = "Arial", size = 14),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.position = "none"
+  )
 
-ggplot(Goray_study_data, aes(x = Hand, y = Total_DNA, fill = Hand)) +
-  geom_boxplot(outlier.shape = NA, alpha = 0.6) +
-  geom_jitter(width = 0.2, alpha = 0.6, size = 2, aes(color = Hand)) +
-  scale_fill_manual(values = c("L" = "salmon", "R" = "turquoise")) +
-  scale_color_manual(values = c("L" = "salmon", "R" = "turquoise")) +
-  labs(
-    title = "DNA quantities from Goray et al.",
-    subtitle = "Grouped by hand (Left/Right) across all days",
-    x = "Hand",
-    y = "DNA quantity (ng)"
-  ) +
-  theme_minimal(base_size = 14) +
-  theme(legend.position = "none")
+# Show plot
+plot_Goray_repeat
 
-# Replace names
-Goray_data_our_study <- Goray_data_our_study %>%
-  mutate(Hand = recode(Hand, "Total_L" = "L", "Total_R" = "R"))
+#### Final plot for article - Figure 3 ####
+# Clean individual plots
+plot_A <- plot_Goray_data + 
+  rremove("ylab") +
+  theme(plot.title = element_text(hjust = 0.5))
 
-# Combine the two datasets
-combined_data <- bind_rows(
-  Goray_study_data %>% select(Study, Hand, Total_DNA),
-  Goray_data_our_study %>% select(Study, Hand,Total_DNA))
+plot_B <- plot_Goray_repeat + 
+  rremove("ylab") +
+  theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(combined_data, aes(x = Study, y = Total_DNA, fill = Hand)) +
-  geom_boxplot(outlier.shape = NA, alpha = 0.6, position = position_dodge(width = 0.75)) +
-  geom_jitter(aes(color = Hand),
-              position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.75),
-              size = 2, alpha = 0.6) +
-  scale_fill_manual(values = c("L" = "salmon", "R" = "turquoise")) +
-  scale_color_manual(values = c("L" = "salmon", "R" = "turquoise")) +
-  labs(
-    title = "Comparison of DNA",
-    subtitle = "Goray et al. vs Proxy DNA",
-    x = "Study",
-    y = "DNA quantity (ng)",
-    fill = "Hand",
-    color = "Hand"
-  ) +
-  theme_minimal(base_size = 14)
+# Combine plots with labels A and B
+pCombined_Goray_pending <- ggarrange(plot_A, plot_B,
+                                        labels = c("A", "B"),
+                                        ncol = 2, nrow = 1,
+                                        align = "hv",
+                                        common.legend = FALSE,
+                                        font.label = list(size = 12, color = "black"),
+                                        hjust = -0.5, vjust = 1.2) +
+  theme(plot.margin = margin(0, 0.5, 0, 0, "cm"))  # (Top, Right, Bottom, Left)
 
-rm(Goray_data_averaged, Goray_data_intermediate,Goray_data_total,Goray_data)
+# Add shared y-axis label
+pCombined_Goray <- annotate_figure(
+  pCombined_Goray_pending,
+  left = text_grob("DNA Quantity (ng)", rot = 90, vjust = 0.5, hjust = 0.5, size = 12),
+  bottom = NULL  # You can add shared x-axis here if you want
+)
 
-#### Statistics ####
-#  Wilcoxon rank-sum test: Left Hand Only
-left_hand <- combined_data %>%
-  filter(Hand == "L")
+# Show the combined plot
+pCombined_Goray
 
-wilcox.test(Total_DNA ~ Study, data = combined_data %>% filter(Hand == "L"))
-
-# Wilcoxon rank-sum test: right Hand Only
-right_hand <- combined_data %>%
-  filter(Hand == "R")
-
-wilcox.test(Total_DNA ~ Study, data = combined_data %>% filter(Hand == "R"))
-
-# Wilcoxon rank-sum test: Both Hands Combined
-wilcox.test(Total_DNA ~ Study, data = combined_data)
+# Save the figure
+ggsave("./Results/Goray_combined_plot.png", pCombined_Goray,
+       width = 10, height = 5, dpi = 600, units = "in")
 
 # ------------------------------------------------------------------------
 # Section 5: Meakin et al.
@@ -411,7 +437,7 @@ Meakin_data <- read_csv("./Data/Approximate_Meakin_dna_quantities.csv")
 
 # Plot
 plot_Meakin_data <- ggplot(Meakin_data, aes(x = Knife, y = Total_DNA)) +
-  geom_bar(stat = "identity", fill = "grey70", colour = "black", width = 0.7) +
+  geom_bar(stat = "identity", fill = "grey90", colour = "black", width = 0.7) +
   geom_errorbar(aes(ymin = Total_DNA, ymax = Total_DNA + SD),
                 width = 0.2) +
   scale_y_continuous(
@@ -421,7 +447,7 @@ plot_Meakin_data <- ggplot(Meakin_data, aes(x = Knife, y = Total_DNA)) +
     x = "Knife",
     y = "DNA Quantity (ng)"
   ) +
-  theme_minimal()
+  theme_bw()
 
 # Show plot
 plot_Meakin_data

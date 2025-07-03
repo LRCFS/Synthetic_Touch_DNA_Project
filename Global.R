@@ -45,6 +45,7 @@ library(reshape2)
 library(plotly)
 library(readxl) #Library to read .xls files
 library(rstatix)
+library(ggtext) #library to allow inline formatting using HTML-like syntax 
 
 #############################################################
 #####                   Functions                       #####

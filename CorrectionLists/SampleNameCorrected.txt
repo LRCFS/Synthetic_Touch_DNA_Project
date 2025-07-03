@@ -1,181 +1,181 @@
-Name					NameCorrected
-1	P	Op1	H	L	P_Op1_H_L
-2	P	Op1	H	R	P_Op1_H_R
-3	P	Op1	H	L	P_Op1_H_L
-4	P	Op1	H	R	P_Op1_H_R
-5	P	Op1	H	L	P_Op1_H_L
-6	P	Op1	H	R	P_Op1_H_R
-7	P	Op1	H	L	P_Op1_H_L
-8	P	Op1	H	R	P_Op1_H_R
-9	P	Op1	H	L	P_Op1_H_L
-10	P	Op1	H	R	P_Op1_H_R
-11	P	Op1	A	L	P_Op1_A_L
-12	P	Op1	A	R	P_Op1_A_R
-13	P	Op1	A	L	P_Op1_A_L
-14	P	Op1	A	R	P_Op1_A_R
-15	P	Op1	A	L	P_Op1_A_L
-16	P	Op1	A	R	P_Op1_A_R
-17	P	Op1	A	L	P_Op1_A_L
-18	P	Op1	A	R	P_Op1_A_R
-19	P	Op1	A	L	P_Op1_A_L
-20	P	Op1	A	R	P_Op1_A_R
-21	P	Op2	A	L	P_Op2_A_L
-22	P	Op2	A	R	P_Op2_A_R
-23	P	Op2	A	L	P_Op2_A_L
-24	P	Op2	A	R	P_Op2_A_R
-25	P	Op2	A	L	P_Op2_A_L
-26	P	Op2	A	R	P_Op2_A_R
-27	P	Op2	A	L	P_Op2_A_L
-28	P	Op2	A	R	P_Op2_A_R
-29	P	Op2	A	L	P_Op2_A_L
-30	P	Op2	A	R	P_Op2_A_R
-31	P	Op2	L	L	P_Op2_L_L
-32	P	Op2	L	R	P_Op2_L_R
-33	P	Op2	L	L	P_Op2_L_L
-34	P	Op2	L	R	P_Op2_L_R
-35	P	Op2	L	L	P_Op2_L_L
-36	P	Op2	L	R	P_Op2_L_R
-37	P	Op2	L	L	P_Op2_L_L
-38	P	Op2	L	R	P_Op2_L_R
-39	P	Op2	L	L	P_Op2_L_L
-40	P	Op2	L	R	P_Op2_L_R
-41	P	Op3	L	L	P_Op3_L_L
-42	P	Op3	L	R	P_Op3_L_R
-43	P	Op3	L	L	P_Op3_L_L
-44	P	Op3	L	R	P_Op3_L_R
-45	P	Op3	L	L	P_Op3_L_L
-46	P	Op3	L	R	P_Op3_L_R
-47	P	Op3	L	L	P_Op3_L_L
-48	P	Op3	L	R	P_Op3_L_R
-49	P	Op3	L	L	P_Op3_L_L
-50	P	Op3	L	R	P_Op3_L_R
-51	P	Op3	H	L	P_Op3_H_L
-52	P	Op3	H	R	P_Op3_H_R
-53	P	Op3	H	L	P_Op3_H_L
-54	P	Op3	H	R	P_Op3_H_R
-55	P	Op3	H	L	P_Op3_H_L
-56	P	Op3	H	R	P_Op3_H_R
-57	P	Op3	H	L	P_Op3_H_L
-58	P	Op3	H	R	P_Op3_H_R
-59	P	Op3	H	L	P_Op3_H_L
-60	P	Op3	H	R	P_Op3_H_R
-61	F	Op1	H	L	F_Op1_H_L
-62	F	Op1	H	R	F_Op1_H_R
-63	F	Op1	H	L	F_Op1_H_L
-64	F	Op1	H	R	F_Op1_H_R
-65	F	Op1	H	L	F_Op1_H_L
-66	F	Op1	H	R	F_Op1_H_R
-67	F	Op1	H	L	F_Op1_H_L
-68	F	Op1	H	R	F_Op1_H_R
-69	F	Op1	H	L	F_Op1_H_L
-70	F	Op1	H	R	F_Op1_H_R
-71	F	Op1	A	L	F_Op1_A_L
-72	F	Op1	A	R	F_Op1_A_R
-73	F	Op1	A	L	F_Op1_A_L
-74	F	Op1	A	R	F_Op1_A_R
-75	F	Op1	A	L	F_Op1_A_L
-76	F	Op1	A	R	F_Op1_A_R
-77	F	Op1	A	L	F_Op1_A_L
-78	F	Op1	A	R	F_Op1_A_R
-79	F	Op1	A	L	F_Op1_A_L
-80	F	Op1	A	R	F_Op1_A_R
-81	F	Op2	A	L	F_Op2_A_L
-82	F	Op2	A	R	F_Op2_A_R
-83	F	Op2	A	L	F_Op2_A_L
-84	F	Op2	A	R	F_Op2_A_R
-85	F	Op2	A	L	F_Op2_A_L
-86	F	Op2	A	R	F_Op2_A_R
-87	F	Op2	A	L	F_Op2_A_L
-88	F	Op2	A	R	F_Op2_A_R
-89	F	Op2	A	L	F_Op2_A_L
-90	F	Op2	A	R	F_Op2_A_R
-91	F	Op2	L	L	F_Op2_L_L
-92	F	Op2	L	R	F_Op2_L_R
-93	F	Op2	L	L	F_Op2_L_L
-94	F	Op2	L	R	F_Op2_L_R
-95	F	Op2	L	L	F_Op2_L_L
-96	F	Op2	L	R	F_Op2_L_R
-97	F	Op2	L	L	F_Op2_L_L
-98	F	Op2	L	R	F_Op2_L_R
-99	F	Op2	L	L	F_Op2_L_L
-100	F	Op2	L	R	F_Op2_L_R
-101	F	Op3	L	L	F_Op3_L_L
-102	F	Op3	L	R	F_Op3_L_R
-103	F	Op3	L	L	F_Op3_L_L
-104	F	Op3	L	R	F_Op3_L_R
-105	F	Op3	L	L	F_Op3_L_L
-106	F	Op3	L	R	F_Op3_L_R
-107	F	Op3	L	L	F_Op3_L_L
-108	F	Op3	L	R	F_Op3_L_R
-109	F	Op3	L	L	F_Op3_L_L
-110	F	Op3	L	R	F_Op3_L_R
-111	F	Op3	H	L	F_Op3_H_L
-112	F	Op3	H	R	F_Op3_H_R
-113	F	Op3	H	L	F_Op3_H_L
-114	F	Op3	H	R	F_Op3_H_R
-115	F	Op3	H	L	F_Op3_H_L
-116	F	Op3	H	R	F_Op3_H_R
-117	F	Op3	H	L	F_Op3_H_L
-118	F	Op3	H	R	F_Op3_H_R
-119	F	Op3	H	L	F_Op3_H_L
-120	F	Op3	H	R	F_Op3_H_R
-121	G	Op1	H	L	G_Op1_H_L
-122	G	Op1	H	R	G_Op1_H_R
-123	G	Op1	H	L	G_Op1_H_L
-124	G	Op1	H	R	G_Op1_H_R
-125	G	Op1	H	L	G_Op1_H_L
-126	G	Op1	H	R	G_Op1_H_R
-127	G	Op1	H	L	G_Op1_H_L
-128	G	Op1	H	R	G_Op1_H_R
-129	G	Op1	H	L	G_Op1_H_L
-130	G	Op1	H	R	G_Op1_H_R
-131	G	Op1	A	L	G_Op1_A_L
-132	G	Op1	A	R	G_Op1_A_R
-133	G	Op1	A	L	G_Op1_A_L
-134	G	Op1	A	R	G_Op1_A_R
-135	G	Op1	A	L	G_Op1_A_L
-136	G	Op1	A	R	G_Op1_A_R
-137	G	Op1	A	L	G_Op1_A_L
-138	G	Op1	A	R	G_Op1_A_R
-139	G	Op1	A	L	G_Op1_A_L
-140	G	Op1	A	R	G_Op1_A_R
-141	G	Op2	A	L	G_Op2_A_L
-142	G	Op2	A	R	G_Op2_A_R
-143	G	Op2	A	L	G_Op2_A_L
-144	G	Op2	A	R	G_Op2_A_R
-145	G	Op2	A	L	G_Op2_A_L
-146	G	Op2	A	R	G_Op2_A_R
-147	G	Op2	A	L	G_Op2_A_L
-148	G	Op2	A	R	G_Op2_A_R
-149	G	Op2	A	L	G_Op2_A_L
-150	G	Op2	A	R	G_Op2_A_R
-151	G	Op2	L	L	G_Op2_L_L
-152	G	Op2	L	R	G_Op2_L_R
-153	G	Op2	L	L	G_Op2_L_L
-154	G	Op2	L	R	G_Op2_L_R
-155	G	Op2	L	L	G_Op2_L_L
-156	G	Op2	L	R	G_Op2_L_R
-157	G	Op2	L	L	G_Op2_L_L
-158	G	Op2	L	R	G_Op2_L_R
-159	G	Op2	L	L	G_Op2_L_L
-160	G	Op2	L	R	G_Op2_L_R
-161	G	Op3	L	L	G_Op3_L_L
-162	G	Op3	L	R	G_Op3_L_R
-163	G	Op3	L	L	G_Op3_L_L
-164	G	Op3	L	R	G_Op3_L_R
-165	G	Op3	L	L	G_Op3_L_L
-166	G	Op3	L	R	G_Op3_L_R
-167	G	Op3	L	L	G_Op3_L_L
-168	G	Op3	L	R	G_Op3_L_R
-169	G	Op3	L	L	G_Op3_L_L
-170	G	Op3	L	R	G_Op3_L_R
-171	G	Op3	H	L	G_Op3_H_L
-172	G	Op3	H	R	G_Op3_H_R
-173	G	Op3	H	L	G_Op3_H_L
-174	G	Op3	H	R	G_Op3_H_R
-175	G	Op3	H	L	G_Op3_H_L
-176	G	Op3	H	R	G_Op3_H_R
-177	G	Op3	H	L	G_Op3_H_L
-178	G	Op3	H	R	G_Op3_H_R
-179	G	Op3	H	L	G_Op3_H_L
-180	G	Op3	H	R	G_Op3_H_R
+Name						NameCorrected
+1	P	Op1	H	L	Rep1	P_Op1_H_L_Rep1
+2	P	Op1	H	R	Rep1	P_Op1_H_R_Rep1
+3	P	Op1	H	L	Rep2	P_Op1_H_L_Rep2
+4	P	Op1	H	R	Rep2	P_Op1_H_R_Rep2
+5	P	Op1	H	L	Rep3	P_Op1_H_L_Rep3
+6	P	Op1	H	R	Rep3	P_Op1_H_R_Rep3
+7	P	Op1	H	L	Rep4	P_Op1_H_L_Rep4
+8	P	Op1	H	R	Rep4	P_Op1_H_R_Rep4
+9	P	Op1	H	L	Rep5	P_Op1_H_L_Rep5
+10	P	Op1	H	R	Rep5	P_Op1_H_R_Rep5
+11	P	Op1	A	L	Rep1	P_Op1_A_L_Rep1
+12	P	Op1	A	R	Rep1	P_Op1_A_R_Rep1
+13	P	Op1	A	L	Rep2	P_Op1_A_L_Rep2
+14	P	Op1	A	R	Rep2	P_Op1_A_R_Rep2
+15	P	Op1	A	L	Rep3	P_Op1_A_L_Rep3
+16	P	Op1	A	R	Rep3	P_Op1_A_R_Rep3
+17	P	Op1	A	L	Rep4	P_Op1_A_L_Rep4
+18	P	Op1	A	R	Rep4	P_Op1_A_R_Rep4
+19	P	Op1	A	L	Rep5	P_Op1_A_L_Rep5
+20	P	Op1	A	R	Rep5	P_Op1_A_R_Rep5
+21	P	Op2	A	L	Rep1	P_Op2_A_L_Rep1
+22	P	Op2	A	R	Rep1	P_Op2_A_R_Rep1
+23	P	Op2	A	L	Rep2	P_Op2_A_L_Rep2
+24	P	Op2	A	R	Rep2	P_Op2_A_R_Rep2
+25	P	Op2	A	L	Rep3	P_Op2_A_L_Rep3
+26	P	Op2	A	R	Rep3	P_Op2_A_R_Rep3
+27	P	Op2	A	L	Rep4	P_Op2_A_L_Rep4
+28	P	Op2	A	R	Rep4	P_Op2_A_R_Rep4
+29	P	Op2	A	L	Rep5	P_Op2_A_L_Rep5
+30	P	Op2	A	R	Rep5	P_Op2_A_R_Rep5
+31	P	Op2	L	L	Rep1	P_Op2_L_L_Rep1
+32	P	Op2	L	R	Rep1	P_Op2_L_R_Rep1
+33	P	Op2	L	L	Rep2	P_Op2_L_L_Rep2
+34	P	Op2	L	R	Rep2	P_Op2_L_R_Rep2
+35	P	Op2	L	L	Rep3	P_Op2_L_L_Rep3
+36	P	Op2	L	R	Rep3	P_Op2_L_R_Rep3
+37	P	Op2	L	L	Rep4	P_Op2_L_L_Rep4
+38	P	Op2	L	R	Rep4	P_Op2_L_R_Rep4
+39	P	Op2	L	L	Rep5	P_Op2_L_L_Rep5
+40	P	Op2	L	R	Rep5	P_Op2_L_R_Rep5
+41	P	Op3	L	L	Rep1	P_Op3_L_L_Rep1
+42	P	Op3	L	R	Rep1	P_Op3_L_R_Rep1
+43	P	Op3	L	L	Rep2	P_Op3_L_L_Rep2
+44	P	Op3	L	R	Rep2	P_Op3_L_R_Rep2
+45	P	Op3	L	L	Rep3	P_Op3_L_L_Rep3
+46	P	Op3	L	R	Rep3	P_Op3_L_R_Rep3
+47	P	Op3	L	L	Rep4	P_Op3_L_L_Rep4
+48	P	Op3	L	R	Rep4	P_Op3_L_R_Rep4
+49	P	Op3	L	L	Rep5	P_Op3_L_L_Rep5
+50	P	Op3	L	R	Rep5	P_Op3_L_R_Rep5
+51	P	Op3	H	L	Rep1	P_Op3_H_L_Rep1
+52	P	Op3	H	R	Rep1	P_Op3_H_R_Rep1
+53	P	Op3	H	L	Rep2	P_Op3_H_L_Rep2
+54	P	Op3	H	R	Rep2	P_Op3_H_R_Rep2
+55	P	Op3	H	L	Rep3	P_Op3_H_L_Rep3
+56	P	Op3	H	R	Rep3	P_Op3_H_R_Rep3
+57	P	Op3	H	L	Rep4	P_Op3_H_L_Rep4
+58	P	Op3	H	R	Rep4	P_Op3_H_R_Rep4
+59	P	Op3	H	L	Rep5	P_Op3_H_L_Rep5
+60	P	Op3	H	R	Rep5	P_Op3_H_R_Rep5
+61	F	Op1	H	L	Rep1	F_Op1_H_L_Rep1
+62	F	Op1	H	R	Rep1	F_Op1_H_R_Rep1
+63	F	Op1	H	L	Rep2	F_Op1_H_L_Rep2
+64	F	Op1	H	R	Rep2	F_Op1_H_R_Rep2
+65	F	Op1	H	L	Rep3	F_Op1_H_L_Rep3
+66	F	Op1	H	R	Rep3	F_Op1_H_R_Rep3
+67	F	Op1	H	L	Rep4	F_Op1_H_L_Rep4
+68	F	Op1	H	R	Rep4	F_Op1_H_R_Rep4
+69	F	Op1	H	L	Rep5	F_Op1_H_L_Rep5
+70	F	Op1	H	R	Rep5	F_Op1_H_R_Rep5
+71	F	Op1	A	L	Rep1	F_Op1_A_L_Rep1
+72	F	Op1	A	R	Rep1	F_Op1_A_R_Rep1
+73	F	Op1	A	L	Rep2	F_Op1_A_L_Rep2
+74	F	Op1	A	R	Rep2	F_Op1_A_R_Rep2
+75	F	Op1	A	L	Rep3	F_Op1_A_L_Rep3
+76	F	Op1	A	R	Rep3	F_Op1_A_R_Rep3
+77	F	Op1	A	L	Rep4	F_Op1_A_L_Rep4
+78	F	Op1	A	R	Rep4	F_Op1_A_R_Rep4
+79	F	Op1	A	L	Rep5	F_Op1_A_L_Rep5
+80	F	Op1	A	R	Rep5	F_Op1_A_R_Rep5
+81	F	Op2	A	L	Rep1	F_Op2_A_L_Rep1
+82	F	Op2	A	R	Rep1	F_Op2_A_R_Rep1
+83	F	Op2	A	L	Rep2	F_Op2_A_L_Rep2
+84	F	Op2	A	R	Rep2	F_Op2_A_R_Rep2
+85	F	Op2	A	L	Rep3	F_Op2_A_L_Rep3
+86	F	Op2	A	R	Rep3	F_Op2_A_R_Rep3
+87	F	Op2	A	L	Rep4	F_Op2_A_L_Rep4
+88	F	Op2	A	R	Rep4	F_Op2_A_R_Rep4
+89	F	Op2	A	L	Rep5	F_Op2_A_L_Rep5
+90	F	Op2	A	R	Rep5	F_Op2_A_R_Rep5
+91	F	Op2	L	L	Rep1	F_Op2_L_L_Rep1
+92	F	Op2	L	R	Rep1	F_Op2_L_R_Rep1
+93	F	Op2	L	L	Rep2	F_Op2_L_L_Rep2
+94	F	Op2	L	R	Rep2	F_Op2_L_R_Rep2
+95	F	Op2	L	L	Rep3	F_Op2_L_L_Rep3
+96	F	Op2	L	R	Rep3	F_Op2_L_R_Rep3
+97	F	Op2	L	L	Rep4	F_Op2_L_L_Rep4
+98	F	Op2	L	R	Rep4	F_Op2_L_R_Rep4
+99	F	Op2	L	L	Rep5	F_Op2_L_L_Rep5
+100	F	Op2	L	R	Rep5	F_Op2_L_R_Rep5
+101	F	Op3	L	L	Rep1	F_Op3_L_L_Rep1
+102	F	Op3	L	R	Rep1	F_Op3_L_R_Rep1
+103	F	Op3	L	L	Rep2	F_Op3_L_L_Rep2
+104	F	Op3	L	R	Rep2	F_Op3_L_R_Rep2
+105	F	Op3	L	L	Rep3	F_Op3_L_L_Rep3
+106	F	Op3	L	R	Rep3	F_Op3_L_R_Rep3
+107	F	Op3	L	L	Rep4	F_Op3_L_L_Rep4
+108	F	Op3	L	R	Rep4	F_Op3_L_R_Rep4
+109	F	Op3	L	L	Rep5	F_Op3_L_L_Rep5
+110	F	Op3	L	R	Rep5	F_Op3_L_R_Rep5
+111	F	Op3	H	L	Rep1	F_Op3_H_L_Rep1
+112	F	Op3	H	R	Rep1	F_Op3_H_R_Rep1
+113	F	Op3	H	L	Rep2	F_Op3_H_L_Rep2
+114	F	Op3	H	R	Rep2	F_Op3_H_R_Rep2
+115	F	Op3	H	L	Rep3	F_Op3_H_L_Rep3
+116	F	Op3	H	R	Rep3	F_Op3_H_R_Rep3
+117	F	Op3	H	L	Rep4	F_Op3_H_L_Rep4
+118	F	Op3	H	R	Rep4	F_Op3_H_R_Rep4
+119	F	Op3	H	L	Rep5	F_Op3_H_L_Rep5
+120	F	Op3	H	R	Rep5	F_Op3_H_R_Rep5
+121	G	Op1	H	L	Rep1	G_Op1_H_L_Rep1
+122	G	Op1	H	R	Rep1	G_Op1_H_R_Rep1
+123	G	Op1	H	L	Rep2	G_Op1_H_L_Rep2
+124	G	Op1	H	R	Rep2	G_Op1_H_R_Rep2
+125	G	Op1	H	L	Rep3	G_Op1_H_L_Rep3
+126	G	Op1	H	R	Rep3	G_Op1_H_R_Rep3
+127	G	Op1	H	L	Rep4	G_Op1_H_L_Rep4
+128	G	Op1	H	R	Rep4	G_Op1_H_R_Rep4
+129	G	Op1	H	L	Rep5	G_Op1_H_L_Rep5
+130	G	Op1	H	R	Rep5	G_Op1_H_R_Rep5
+131	G	Op1	A	L	Rep1	G_Op1_A_L_Rep1
+132	G	Op1	A	R	Rep1	G_Op1_A_R_Rep1
+133	G	Op1	A	L	Rep2	G_Op1_A_L_Rep2
+134	G	Op1	A	R	Rep2	G_Op1_A_R_Rep2
+135	G	Op1	A	L	Rep3	G_Op1_A_L_Rep3
+136	G	Op1	A	R	Rep3	G_Op1_A_R_Rep3
+137	G	Op1	A	L	Rep4	G_Op1_A_L_Rep4
+138	G	Op1	A	R	Rep4	G_Op1_A_R_Rep4
+139	G	Op1	A	L	Rep5	G_Op1_A_L_Rep5
+140	G	Op1	A	R	Rep5	G_Op1_A_R_Rep5
+141	G	Op2	A	L	Rep1	G_Op2_A_L_Rep1
+142	G	Op2	A	R	Rep1	G_Op2_A_R_Rep1
+143	G	Op2	A	L	Rep2	G_Op2_A_L_Rep2
+144	G	Op2	A	R	Rep2	G_Op2_A_R_Rep2
+145	G	Op2	A	L	Rep3	G_Op2_A_L_Rep3
+146	G	Op2	A	R	Rep3	G_Op2_A_R_Rep3
+147	G	Op2	A	L	Rep4	G_Op2_A_L_Rep4
+148	G	Op2	A	R	Rep4	G_Op2_A_R_Rep4
+149	G	Op2	A	L	Rep5	G_Op2_A_L_Rep5
+150	G	Op2	A	R	Rep5	G_Op2_A_R_Rep5
+151	G	Op2	L	L	Rep1	G_Op2_L_L_Rep1
+152	G	Op2	L	R	Rep1	G_Op2_L_R_Rep1
+153	G	Op2	L	L	Rep2	G_Op2_L_L_Rep2
+154	G	Op2	L	R	Rep2	G_Op2_L_R_Rep2
+155	G	Op2	L	L	Rep3	G_Op2_L_L_Rep3
+156	G	Op2	L	R	Rep3	G_Op2_L_R_Rep3
+157	G	Op2	L	L	Rep4	G_Op2_L_L_Rep4
+158	G	Op2	L	R	Rep4	G_Op2_L_R_Rep4
+159	G	Op2	L	L	Rep5	G_Op2_L_L_Rep5
+160	G	Op2	L	R	Rep5	G_Op2_L_R_Rep5
+161	G	Op3	L	L	Rep1	G_Op3_L_L_Rep1
+162	G	Op3	L	R	Rep1	G_Op3_L_R_Rep1
+163	G	Op3	L	L	Rep2	G_Op3_L_L_Rep2
+164	G	Op3	L	R	Rep2	G_Op3_L_R_Rep2
+165	G	Op3	L	L	Rep3	G_Op3_L_L_Rep3
+166	G	Op3	L	R	Rep3	G_Op3_L_R_Rep3
+167	G	Op3	L	L	Rep4	G_Op3_L_L_Rep4
+168	G	Op3	L	R	Rep4	G_Op3_L_R_Rep4
+169	G	Op3	L	L	Rep5	G_Op3_L_L_Rep5
+170	G	Op3	L	R	Rep5	G_Op3_L_R_Rep5
+171	G	Op3	H	L	Rep1	G_Op3_H_L_Rep1
+172	G	Op3	H	R	Rep1	G_Op3_H_R_Rep1
+173	G	Op3	H	L	Rep2	G_Op3_H_L_Rep2
+174	G	Op3	H	R	Rep2	G_Op3_H_R_Rep2
+175	G	Op3	H	L	Rep3	G_Op3_H_L_Rep3
+176	G	Op3	H	R	Rep3	G_Op3_H_R_Rep3
+177	G	Op3	H	L	Rep4	G_Op3_H_L_Rep4
+178	G	Op3	H	R	Rep4	G_Op3_H_R_Rep4
+179	G	Op3	H	L	Rep5	G_Op3_H_L_Rep5
+180	G	Op3	H	R	Rep5	G_Op3_H_R_Rep5
