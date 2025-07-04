@@ -179,3 +179,108 @@ Name						NameCorrected
 178	G	Op3	H	R	Rep4	G_Op3_H_R_Rep4
 179	G	Op3	H	L	Rep5	G_Op3_H_L_Rep5
 180	G	Op3	H	R	Rep5	G_Op3_H_R_Rep5
+K1_A	M	K1	C			M_K1_C
+K1_E	M	K1	A			M_K1_A
+K1_V	M	K1	B			M_K1_B
+K2_A	M	K2	C			M_K2_C
+K2_E	M	K2	A			M_K2_A
+K2_V	M	K2	B			M_K2_B
+K3_A	M	K3	C			M_K3_C
+K3_E	M	K3	A			M_K3_A
+K3_V	M	K3	B			M_K3_B
+EY_L1	D	Op1	Yellow	left	Rep1	D_Op1_Yellow_left_Rep1
+EY_R1	D	Op1	Yellow	right	Rep1	D_Op1_Yellow_right_Rep1
+EY_L2	D	Op1	Yellow	left	Rep2	D_Op1_Yellow_left_Rep2
+EY_R2	D	Op1	Yellow	right	Rep2	D_Op1_Yellow_right_Rep2
+EG_L1	D	Op1	Grey-blue	left	Rep1	D_Op1_Grey-blue_left_Rep1
+EG_R1	D	Op1	Grey-blue	right	Rep1	D_Op1_Grey-blue_right_Rep1
+EG_L2	D	Op1	Grey-blue	left	Rep2	D_Op1_Grey-blue_left_Rep2
+EG_R2	D	Op1	Grey-blue	right	Rep2	D_Op1_Grey-blue_right_Rep2
+AY_L1	D	Op2	Yellow	left	Rep1	D_Op2_Yellow_left_Rep1
+AY_R1	D	Op2	Yellow	right	Rep1	D_Op2_Yellow_right_Rep1
+AY_L2	D	Op2	Yellow	left	Rep2	D_Op2_Yellow_left_Rep2
+AY_R2	D	Op2	Yellow	right	Rep2	D_Op2_Yellow_right_Rep2
+AG_L1	D	Op2	Grey-blue	left	Rep1	D_Op2_Grey-blue_left_Rep1
+AG_R1	D	Op2	Grey-blue	right	Rep1	D_Op2_Grey-blue_right_Rep1
+AG_L2	D	Op2	Grey-blue	left	Rep2	D_Op2_Grey-blue_left_Rep2
+AG_R2	D	Op2	Grey-blue	right	Rep2	D_Op2_Grey-blue_right_Rep2
+VY_L1	D	Op3	Yellow	left	Rep1	D_Op3_Yellow_left_Rep1
+VY_R1	D	Op3	Yellow	right	Rep1	D_Op3_Yellow_right_Rep1
+VG_L2	D	Op3	Yellow	left	Rep2	D_Op3_Yellow_left_Rep2
+VG_R2	D	Op3	Yellow	right	Rep2	D_Op3_Yellow_right_Rep2
+VY_L2	D	Op3	Grey-blue	left	Rep1	D_Op3_Grey-blue_left_Rep1
+VY_R2	D	Op3	Grey-blue	right	Rep1	D_Op3_Grey-blue_right_Rep1
+VG_L1	D	Op3	Grey-blue	left	Rep2	D_Op3_Grey-blue_left_Rep2
+VG_R1	D	Op3	Grey-blue	right	Rep2	D_Op3_Grey-blue_right_Rep2
+E_L_1	B	Op1	left	Rep1	15s	B_Op1_left_Rep1_15s
+E_R_1	B	Op1	right	Rep1	3s	B_Op1_right_Rep1_3s
+E_L_2	B	Op1	left	Rep2	15s	B_Op1_left_Rep2_15s
+E_R_2	B	Op1	right	Rep2	3s	B_Op1_right_Rep2_3s
+E_L_3	B	Op1	left	Rep3	15s	B_Op1_left_Rep3_15s
+E_R_3	B	Op1	right	Rep3	3s	B_Op1_right_Rep3_3s
+A_L_1	B	Op2	left	Rep1	15s	B_Op2_left_Rep1_15s
+A_R_1	B	Op2	right	Rep1	3s	B_Op2_right_Rep1_3s
+A_L_2	B	Op2	left	Rep2	15s	B_Op2_left_Rep2_15s
+A_R_2	B	Op2	right	Rep2	3s	B_Op2_right_Rep2_3s
+A_L_3	B	Op2	left	Rep3	15s	B_Op2_left_Rep3_15s
+A_R_3	B	Op2	right	Rep3	3s	B_Op2_right_Rep3_3s
+V_L_1	B	Op3	left	Rep1	15s	B_Op3_left_Rep1_15s
+V_R_1	B	Op3	right	Rep1	3s	B_Op3_right_Rep1_3s
+V_L_2	B	Op3	left	Rep2	15s	B_Op3_left_Rep2_15s
+V_R_2	B	Op3	right	Rep2	3s	B_Op3_right_Rep2_3s
+V_L_3	B	Op3	left	Rep3	15s	B_Op3_left_Rep3_15s
+V_R_3	B	Op3	right	Rep3	3s	B_Op3_right_Rep3_3s
+EM_1	TF	Op1	Middle	Rep1		TF_Op1_Middle_Rep1
+EM_2	TF	Op1	Middle	Rep2		TF_Op1_Middle_Rep2
+EM_3	TF	Op1	Middle	Rep3		TF_Op1_Middle_Rep3
+EM_4	TF	Op1	Middle	Rep4		TF_Op1_Middle_Rep4
+EI_1	TF	Op1	Index	Rep1		TF_Op1_Index_Rep1
+EI_2	TF	Op1	Index	Rep2		TF_Op1_Index_Rep2
+EI_3	TF	Op1	Index	Rep3		TF_Op1_Index_Rep3
+EI_4	TF	Op1	Index	Rep4		TF_Op1_Index_Rep4
+VM_1	TF	Op3	Middle	Rep1		TF_Op3_Middle_Rep1
+VM_2	TF	Op3	Middle	Rep2		TF_Op3_Middle_Rep2
+VM_3	TF	Op3	Middle	Rep3		TF_Op3_Middle_Rep3
+VM_4	TF	Op3	Middle	Rep4		TF_Op3_Middle_Rep4
+VI_1	TF	Op3	Index	Rep1		TF_Op3_Index_Rep1
+VI_2	TF	Op3	Index	Rep2		TF_Op3_Index_Rep2
+VI_3	TF	Op3	Index	Rep3		TF_Op3_Index_Rep3
+VI_4	TF	Op3	Index	Rep4		TF_Op3_Index_Rep4
+AM_1	TF	Op2	Middle	Rep1		TF_Op2_Middle_Rep1
+AM_2	TF	Op2	Middle	Rep2		TF_Op2_Middle_Rep2
+AM_3	TF	Op2	Middle	Rep3		TF_Op2_Middle_Rep3
+AM_4	TF	Op2	Middle	Rep4		TF_Op2_Middle_Rep4
+AI_1	TF	Op2	Index	Rep1		TF_Op2_Index_Rep1
+AI_2	TF	Op2	Index	Rep2		TF_Op2_Index_Rep2
+AI_3	TF	Op2	Index	Rep3		TF_Op2_Index_Rep3
+AI_4	TF	Op2	Index	Rep4		TF_Op2_Index_Rep4
+E1	L	Op1	Thumb	Rep1		L_Op1_Thumb_Rep1
+E2	L	Op1	Index	Rep1		L_Op1_Index_Rep1
+E3	L	Op1	Middle	Rep1		L_Op1_Middle_Rep1
+E4	L	Op1	Ring	Rep1		L_Op1_Ring_Rep1
+E5	L	Op1	Little	Rep1		L_Op1_Little_Rep1
+E6	L	Op1	Thumb	Rep2		L_Op1_Thumb_Rep2
+E7	L	Op1	Index	Rep2		L_Op1_Index_Rep2
+E8	L	Op1	Middle	Rep2		L_Op1_Middle_Rep2
+E9	L	Op1	Ring	Rep2		L_Op1_Ring_Rep2
+E10	L	Op1	Little	Rep2		L_Op1_Little_Rep2
+V1	L	Op3	Thumb	Rep1		L_Op3_Thumb_Rep1
+V2	L	Op3	Index	Rep1		L_Op3_Index_Rep1
+V3	L	Op3	Middle	Rep1		L_Op3_Middle_Rep1
+V4	L	Op3	Ring	Rep1		L_Op3_Ring_Rep1
+V5	L	Op3	Little	Rep1		L_Op3_Little_Rep1
+V6	L	Op3	Thumb	Rep2		L_Op3_Thumb_Rep2
+V7	L	Op3	Index	Rep2		L_Op3_Index_Rep2
+V8	L	Op3	Middle	Rep2		L_Op3_Middle_Rep2
+V9	L	Op3	Ring	Rep2		L_Op3_Ring_Rep2
+V10	L	Op3	Little	Rep2		L_Op3_Little_Rep2
+A1	L	Op2	Thumb	Rep1		L_Op2_Thumb_Rep1
+A2	L	Op2	Index	Rep1		L_Op2_Index_Rep1
+A3	L	Op2	Middle	Rep1		L_Op2_Middle_Rep1
+A4	L	Op2	Ring	Rep1		L_Op2_Ring_Rep1
+A5	L	Op2	Little	Rep1		L_Op2_Little_Rep1
+A6	L	Op2	Thumb	Rep2		L_Op2_Thumb_Rep2
+A7	L	Op2	Index	Rep2		L_Op2_Index_Rep2
+A8	L	Op2	Middle	Rep2		L_Op2_Middle_Rep2
+A9	L	Op2	Ring	Rep2		L_Op2_Ring_Rep2
+A10	L	Op2	Little	Rep2		L_Op2_Little_Rep2

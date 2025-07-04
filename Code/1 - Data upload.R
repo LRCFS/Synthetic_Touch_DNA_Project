@@ -58,3 +58,25 @@ Data <- Data %>%
   mutate(Quantity_Total = Quantity * Factor)
 
 rm(data, df_list, merged_data, sorted_filtered_data, sorted_data)
+
+
+# ------------------------------------------------------------------------
+# Section 2: Create dataframes for analysis
+# ------------------------------------------------------------------------
+# Remove rows where 'Cт' column has "Undetermined"
+Data <- Data %>%
+  filter(Cт != "Undetermined")
+
+# Create a list of dataframes split by Study name
+data_by_study <- split(Data, Data$Study)
+
+# Extract them individually as named dataframes
+Poetsch_repeat <- data_by_study[["Poetsch"]]
+Fonnelop_repeat <- data_by_study[["Fonnelop"]]
+Goray_repeat <- data_by_study[["Goray"]]
+Thomasma_repeat <- data_by_study[["Thomasma"]]
+Thomasma_repeat$Quantity_Total_pgul <- ((Thomasma_repeat$Quantity_Total)/5)*1000 # 5ul for the PCR and 1000 to convert ng to pg
+Meakin_repeat <- data_by_study[["Meakin"]]
+Daly_repeat <- data_by_study[["Daly"]]
+Lim_repeat <- data_by_study[["Lim"]]
+Bowman_repeat <- data_by_study[["Bowman"]]
