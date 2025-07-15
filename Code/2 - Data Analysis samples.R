@@ -86,26 +86,21 @@ Poetsch_data_with_total <- Poetsch_data_renamed %>%
 Poetsch_data_with_total <- Poetsch_data_with_total %>%
   mutate(Concentration = factor(Concentration, levels = c("Low", "Average", "High")))
 
-# Plot repeated data
+# Plot repeated data as a boxplot
 plot_Poetsch_repeat <- Poetsch_data_with_total %>%
   ggplot(aes(x = Concentration, y = Total_DNA)) +
-  stat_summary(fun = mean, geom = "bar", fill = "#C6DBEF", colour = "black", width = 0.7) +
-  stat_summary(fun.data = function(x) {
-    mean_val <- mean(x, na.rm = TRUE)
-    sd_val <- sd(x, na.rm = TRUE)
-    data.frame(y = mean_val, ymin = mean_val, ymax = mean_val + sd_val)
-    },
-    geom = "errorbar", width = 0.2) +
+  geom_boxplot(fill = "#C6DBEF", colour = "black", width = 0.7, outlier.shape = NA) +
+  geom_jitter(width = 0.15, alpha = 0.6, size = 1.5) +
   labs(y = "DNA Quantity (ng)", x = "Input concentration") +
   scale_y_continuous(
     limits = c(0, 5),
     breaks = seq(0, 5, by = 0.5),
     expand = expansion(mult = c(0, 0.05))) +
-  theme_bw()+
+  theme_bw() +
   theme(
-    text = element_text(family = "Arial", size = 14),  # Set overall font
-    axis.title = element_text(size = 14),              # Axis title font size
-    axis.text = element_text(size = 12),               # Axis tick labels
+    text = element_text(family = "Arial", size = 14),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12)
   )
 
 plot_Poetsch_repeat
@@ -510,26 +505,21 @@ Meakin_data_with_total <- Meakin_data_renamed %>%
     Total_DNA = Cell_DNA + Cell_free_DNA
   )
 
-# Plot repeated data
+# Plot repeated data as a boxplot
 plot_Meakin_repeat <- Meakin_data_with_total %>%
   ggplot(aes(x = Operator, y = Total_DNA)) +
-  stat_summary(fun = mean, geom = "bar", fill = "grey90", colour = "black", width = 0.7) +
-  stat_summary(fun.data = function(x) {
-    mean_val <- mean(x, na.rm = TRUE)
-    sd_val <- sd(x, na.rm = TRUE)
-    data.frame(y = mean_val, ymin = mean_val, ymax = mean_val + sd_val)
-  },
-  geom = "errorbar", width = 0.2) +
+  geom_boxplot(fill = "grey90", colour = "black", width = 0.7, outlier.shape = NA) +
+  geom_jitter(width = 0.15, alpha = 0.6, size = 1.5) +
   labs(y = "DNA Quantity (ng)", x = "\nParticipants") +
   scale_y_continuous(
     limits = c(0, 15),
     breaks = seq(0, 15, by = 2),
     expand = expansion(mult = c(0, 0.05))) +
-  theme_bw()+
+  theme_bw() +
   theme(
-    text = element_text(family = "Arial", size = 14),  # Set overall font
-    axis.title = element_text(size = 14),              # Axis title font size
-    axis.text = element_text(size = 12),               # Axis tick labels
+    text = element_text(family = "Arial", size = 14),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12)
   )
 
 # Show plot
@@ -666,15 +656,11 @@ range_data <- Daly_data_with_total %>%
   summarise(Max_DNA = max(Total_DNA, na.rm = TRUE)) %>%
   mutate(x_pos = as.numeric(factor(Textile_Group)) + 0.5)
 
-# Plot repeated data
+# Plot repeated data as a boxplot
 plot_Daly_repeat <- Daly_data_with_total %>%
   ggplot(aes(x = Textile_Group, y = Total_DNA, fill = Textile_Group)) +
-  stat_summary(fun = mean, geom = "bar", colour = "black", width = 0.7) +
-  stat_summary(fun.data = function(x) {
-    mean_val <- mean(x, na.rm = TRUE)
-    sd_val <- sd(x, na.rm = TRUE)
-    data.frame(y = mean_val, ymin = mean_val, ymax = mean_val + sd_val)
-  }, geom = "errorbar", width = 0.2) +
+  geom_boxplot(colour = "black", width = 0.7, outlier.shape = NA) +
+  geom_jitter(width = 0.15, alpha = 0.6, size = 1.5) +
   
   # Add side range lines
   geom_segment(data = range_data,
@@ -703,6 +689,7 @@ plot_Daly_repeat <- Daly_data_with_total %>%
 
 # Show plot
 plot_Daly_repeat
+
 
 # export data for supplementary information
 write.csv(Daly_data_with_total, "./Results/Daly_repeat_data.csv", row.names = FALSE)
@@ -946,26 +933,21 @@ Thomasma_data_with_total <- Thomasma_data_with_total %>%
                            "Op2" = "B",
                            "Op3" = "C"))
 
-# Plot repeated data
+# Plot repeated data as a boxplot
 plot_Thomasma_repeat <- Thomasma_data_with_total %>%
   ggplot(aes(x = Operator, y = Total_DNA)) +
-  stat_summary(fun = mean, geom = "bar", fill = "grey90", colour = "black", width = 0.7) +
-  stat_summary(fun.data = function(x) {
-    mean_val <- mean(x, na.rm = TRUE)
-    sd_val <- sd(x, na.rm = TRUE)
-    data.frame(y = mean_val, ymin = mean_val, ymax = mean_val + sd_val)
-  },
-  geom = "errorbar", width = 0.2) +
+  geom_boxplot(fill = "grey90", colour = "black", width = 0.7, outlier.shape = NA) +
+  geom_jitter(width = 0.15, alpha = 0.6, size = 1.5) +
   labs(y = "DNA Quantity (ng)", x = "\nParticipants") +
   scale_y_continuous(
     limits = c(0, 6),
     breaks = seq(0, 6, by = 2),
     expand = expansion(mult = c(0, 0.05))) +
-  theme_bw()+
+  theme_bw() +
   theme(
-    text = element_text(family = "Arial", size = 14),  # Set overall font
-    axis.title = element_text(size = 14),              # Axis title font size
-    axis.text = element_text(size = 12),               # Axis tick labels
+    text = element_text(family = "Arial", size = 14),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12)
   )
 
 # Show plot
