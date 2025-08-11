@@ -2,12 +2,25 @@
 #####                           Data upload                          #####
 ##########################################################################
 
-# This R script is the first step to export all the data needed to generate the figure in the article.
-# This includes the data from: 
-# 1: Transfer from hands
+# ------------------------------------------------------------------------
+# Overview:
+# This R script prepares and organises the data required to generate figures 
+# for the article. It processes raw qPCR data files from multiple studies, 
+# corrects sample names, applies volume-based quantity adjustments, and 
+# produces cleaned, study-specific datasets for later analysis and plotting.
+#
+# The workflow includes:
+# 1. Importing and combining all raw .xls data files from study replications
+# 2. Correcting sample names using a reference list
+# 3. Filtering and sorting the dataset
+# 4. Adjusting DNA quantity values based on study-specific extraction volumes
+# 5. Removing undetermined results and separating datasets by study name
+#
+# Output: Cleaned and ready-to-use dataframes for each study.
+# ------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------
-# Section 1: Data from studpy replication
+# Section 1: Data from study replication
 # ------------------------------------------------------------------------
 # Specify the folder path
 folder_path <- "Data/Studies"

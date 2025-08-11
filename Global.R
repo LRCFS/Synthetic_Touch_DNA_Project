@@ -1,9 +1,15 @@
 ###########################################################################
 
-# ARTICLE TITLE
+# Application of synthetic touch DNA deposits in forensic research
 
-# AUTHORS NAMES
-# INSTITUTIONS
+# Emma Hermannsdóttir(1), Virginie Galais(2), Alexander Gray(2), Chris Gannicliffe(3), Niamh Nic Daeid(2), Agnieszka Kuffel(2)*
+
+# (1) Department of Immunology, Genetics, and Pathology (IGP), Uppsala University, Uppsala, Sweden
+# (2) Leverhulme Research Centre for Forensic Science, Department of Science and Engineering, University of Dundee, Dundee, DD1 4HN, UK
+# (3) Scottish Police Authority Forensic Services, Aberdeen Laboratory, Aberdeen, AB24 5EQ, UK
+# * Correspondence: akuffel001@dundee.ac.uk 
+
+# Keywords: XXX
 
 # Website: https://github.com/LRCFS/
 # Contact: lrc@dundee.ac.uk
@@ -29,23 +35,24 @@ rm(list=ls())
 #####                library requirement                #####
 #############################################################
 
-library(plyr)
-library(dplyr)
-library(tidyverse)
-library(ggplot2)
-library(extrafont)
-library(RColorBrewer)
-library(ggpubr)
-library(gridExtra)
-library(grid)
-library(devtools)
-library(ggrepel)
-library(gridExtra)
-library(reshape2)
-library(plotly)
-library(readxl) #Library to read .xls files
-library(rstatix)
-library(ggtext) #library to allow inline formatting using HTML-like syntax 
+library(plyr)        # Tools for organising and summarising datasets (older package, mostly replaced by dplyr)
+library(dplyr)       # Grammar of data wrangling for organising, filtering, and summarising datasets
+library(tidyverse)   # Collection of packages for data analysis and visualisation (includes ggplot2, dplyr, tidyr, readr, etc.)
+library(ggplot2)     # Create static data visualisations using the grammar of graphics
+library(extrafont)   # Import, load, and use system fonts in plots
+library(RColorBrewer)# Predefined colour palettes for plots
+library(ggpubr)      # Publication-ready plots and tools to arrange multiple ggplots
+library(gridExtra)   # Arrange multiple grid-based objects (including ggplots) on a page
+library(grid)        # Low-level grid graphics system for building complex layouts
+library(devtools)    # Tools for creating, testing, and installing R packages
+library(ggrepel)     # Avoid overlapping text labels in ggplot2
+library(reshape2)    # Convert data between wide and long formats
+library(plotly)      # Create interactive plots or make ggplots interactive
+library(readxl)      # Import Excel (.xls and .xlsx) files
+library(rstatix)     # Easy pipe-friendly statistical tests and result formatting
+library(ggtext)      # Use HTML/CSS-like text styling in ggplot2
+library(ggbreak)     # Break or zoom plot axes for improved visualisation
+library(cowplot)     # Publication-quality plot themes and multi-plot layouts
 
 #############################################################
 #####                   Functions                       #####

@@ -2,9 +2,30 @@
 #####                      Data analysis washes                      #####
 ##########################################################################
 
-# This R script is the first step to export all the data needed to generate the figure in the article.
-# This includes the data from: 
-# XXX
+# ------------------------------------------------------------------------
+# Overview:
+# This R script analyses DNA quantity data from multiple published studies 
+# and from repeated experimental data collected in the current project.
+# For each study, the workflow:
+#   1. Imports DNA quantification data from the original publication
+#   2. Cleans and reformats the repeated experimental data (proxy experiments)
+#   3. Calculates total DNA quantities
+#   4. Produces visual comparisons between published results and repeated data
+#   5. Exports processed datasets for supplementary information
+#   6. Combines plots into publication-ready figures
+#
+# Included studies and their corresponding sections:
+#   Section 1 – Poetsch et al.
+#   Section 2 – Fonnelop et al.
+#   Section 3 – Goray et al.
+#   Section 4 – Meakin et al.
+#   Section 5 – Daly et al.
+#   Section 6 – Bowman et al.
+#   Section 7 – Thomasma and Foran
+#   Section 8 – Lim et al.
+#
+# Output: Cleaned datasets (.csv) and high-resolution combined figures (.png)
+# ------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------
 # Section 1: Poetsch et al.
@@ -597,7 +618,7 @@ plot_Daly_data <- ggplot(Daly_data, aes(x = Material, y = Mean_DNA_ng)) +
   
   scale_y_continuous(
     limits = c(0, 15),
-    breaks = seq(0, 15, by = 2),
+    breaks = seq(0, 15, by = 0.5),
     expand = expansion(mult = c(0, 0.05))
   ) +
   labs(
@@ -611,6 +632,12 @@ plot_Daly_data <- ggplot(Daly_data, aes(x = Material, y = Mean_DNA_ng)) +
     axis.text = element_text(size = 12)
   )
 plot_Daly_data
+
+y <- plot_Daly_data+scale_y_break(c(2, 13))+
+  theme(axis.ticks.y.right = element_blank(),
+        axis.text.y.right = element_blank(),
+        axis.title.y.right = element_blank())
+y
 
 #### Repeated data with Proxy ####
 # Select the columns of interest
@@ -674,10 +701,10 @@ plot_Daly_repeat <- Daly_data_with_total %>%
              shape = 95, size = 5) +
   
   scale_fill_manual(values = c("Grey/Blue, woven" = "#377eb8", "Yellow, knitted" = "#FFD700")) +
-  labs(y = "DNA Quantity (ng)", x = NULL) +
+  labs(y = "DNA Quantity (ng)", x = expression(paste("Current study", italic("")))) +
   scale_y_continuous(
     limits = c(0, 15),
-    breaks = seq(0, 15, by = 2),
+    breaks = seq(0, 15, by = 0.5),
     expand = expansion(mult = c(0, 0.05))) +
   theme_bw() +
   theme(
@@ -687,45 +714,38 @@ plot_Daly_repeat <- Daly_data_with_total %>%
     legend.position = "none"
   )
 
+x <- plot_Daly_repeat+scale_y_break(c(2, 13))+
+  theme(axis.ticks.y.right = element_blank(),
+        axis.text.y.right = element_blank(),
+        axis.title.y.right = element_blank())
+x
+
 # Show plot
 plot_Daly_repeat
-
 
 # export data for supplementary information
 write.csv(Daly_data_with_total, "./Results/Daly_repeat_data.csv", row.names = FALSE)
 
 #### Final plot for article - Figure 5 ####
 # Clean individual plots
-plot_A <- plot_Daly_data + 
-  rremove("ylab") +
+plot_A <- y + 
   theme(plot.title = element_text(hjust = 0.5))
+plot_A
 
-plot_B <- plot_Daly_repeat + 
+plot_B <- x + 
   rremove("ylab") +
   theme(plot.title = element_text(hjust = 0.5))
+plot_B
 
 # Combine plots with labels A and B
-pCombined_Daly_pending <- ggarrange(plot_A, plot_B,
-                                      labels = c("A", "B"),
-                                      ncol = 2, nrow = 1,
-                                      align = "hv",
-                                      common.legend = FALSE,
-                                      font.label = list(size = 12, color = "black"),
-                                      hjust = -0.5, vjust = 1.2) +
-  theme(plot.margin = margin(0, 0.5, 0, 0, "cm"))  # (Top, Right, Bottom, Left)
+pCombined_Daly_pending <- (plot_A | plot_B) +
+  plot_layout(guides = "collect", axes = "collect") &
+  theme(plot.margin = margin(0, 0, 0, 0, "cm"))
 
-# Add shared y-axis label
-pCombined_Daly <- annotate_figure(
-  pCombined_Daly_pending,
-  left = text_grob("DNA Quantity (ng)", rot = 90, vjust = 0.5, hjust = 0.5, size = 12),
-  bottom = NULL  # You can add shared x-axis here if you want
-)
-
-# Show the combined plot
-pCombined_Daly
+pCombined_Daly_pending
 
 # Save the figure
-ggsave("./Results/Daly_combined_plot.png", pCombined_Daly,
+ggsave("./Results/Daly_combined_plot.png", pCombined_Daly_pending,
        width = 10, height = 5, dpi = 600, units = "in")
 
 # ------------------------------------------------------------------------
