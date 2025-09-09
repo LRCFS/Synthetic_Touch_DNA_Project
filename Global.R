@@ -53,6 +53,7 @@ library(rstatix)     # Easy pipe-friendly statistical tests and result formattin
 library(ggtext)      # Use HTML/CSS-like text styling in ggplot2
 library(ggbreak)     # Break or zoom plot axes for improved visualisation
 library(cowplot)     # Publication-quality plot themes and multi-plot layouts
+library(patchwork)   # for plot_layout()
 
 #############################################################
 #####                   Functions                       #####

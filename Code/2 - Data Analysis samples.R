@@ -45,8 +45,8 @@ plot_Poetsch_data <- ggplot(Poetsch_data, aes(x = Age_Group, y = DNA_qt)) +
   geom_bar(stat = "identity", fill = "#C6DBEF", colour = "black", width = 0.7) +
   geom_errorbar(aes(ymin = DNA_qt, ymax = DNA_qt + Error), width = 0.3) +
   scale_y_continuous(
-    limits = c(0, 5),
-    breaks = seq(0, 5, by = 0.5),
+    limits = c(0, 5.2),
+    breaks = seq(0, 5.2, by = 0.5),
     expand = expansion(mult = c(0, 0.05))) +
   theme_bw() +
   labs(x = "Age Group",y = "DNA Quantity (ng)") +
@@ -114,8 +114,8 @@ plot_Poetsch_repeat <- Poetsch_data_with_total %>%
   geom_jitter(width = 0.15, alpha = 0.6, size = 1.5) +
   labs(y = "DNA Quantity (ng)", x = "Input concentration") +
   scale_y_continuous(
-    limits = c(0, 5),
-    breaks = seq(0, 5, by = 0.5),
+    limits = c(0, 5.2),
+    breaks = seq(0, 5.2, by = 0.5),
     expand = expansion(mult = c(0, 0.05))) +
   theme_bw() +
   theme(
@@ -141,7 +141,7 @@ plot_B <- plot_Poetsch_repeat +
 
 # Combine plots with labels A and B
 pCombined_Poetsch_pending <- ggarrange(plot_A, plot_B,
-                                       labels = c("A", "B"),
+                                       labels = c("(I)", "(II)"),
                                        ncol = 2, nrow = 1,
                                        align = "hv",
                                        common.legend = FALSE,
@@ -161,7 +161,7 @@ pCombined_Poetsch
 
 # Save the figure
 ggsave("./Results/Poetsch_combined_plot.png", pCombined_Poetsch,
-       width = 10, height = 5, dpi = 600, units = "in")
+       width = 10, height = 5, dpi = 900, units = "in")
 
 # ------------------------------------------------------------------------
 # Section 2: Fonnelop et al.
@@ -172,26 +172,25 @@ fonnelop_data <- read_csv("./Data/Approximate_fonnelop_dna_quantities.csv") %>%
   rename(Total_DNA = Quantity)
 
 # Plot
-plot_fonnelop_data <- ggplot(fonnelop_data, aes(x = "Fonnelop <i>et al.</i>", y = Total_DNA)) +
+plot_fonnelop_data <- ggplot(fonnelop_data, aes(x = "Fonnelop", y = Total_DNA)) +
   geom_boxplot(width = 0.3, outlier.shape = NA, colour = "black", fill = NA) +
   geom_jitter(aes(colour = Gender, shape = Gender), width = 0.15, size = 2, alpha = 0.7) +
-  scale_colour_manual(values = c("F" = "grey40", "M" = "steelblue")) +
-  scale_shape_manual(values = c("F" = 16, "M" = 4)) +
-  scale_y_continuous(
-    breaks = seq(0, 4, by = 0.5),
-    limits = c(0, 4)
-  ) +
+  scale_colour_manual(values = c(F = "grey40", M = "steelblue"), name = "Gender") +
+  scale_shape_manual(values = c(F = 16, M = 4), name = "Gender") +
+  scale_y_continuous(breaks = seq(0, 4.2, 0.5), limits = c(0, 4.2)) +
+  # <- single-line italicisation with plotmath
+  scale_x_discrete(labels = c(Fonnelop = expression("Fonnelop "*italic("et al.")))) +
   labs(x = "\nStudy", y = "DNA Quantity (ng)") +
+  coord_cartesian(clip = "off") +
   theme_bw() +
   theme(
     legend.position = c(0.85, 0.85),
-    legend.background = element_rect(fill = "white", colour = "black", size = 0.7),
-    legend.margin = margin(7,9,7,8),
-    legend.key.size = unit(1.2, "lines"),
-    axis.text.x = element_markdown(family = "Arial", size = 12),
+    legend.background = element_rect(size = 0.7),
+    axis.text.x = element_text(family = "Arial", size = 12, margin = margin(t = 6)),
     text = element_text(family = "Arial", size = 14),
-    axis.title = element_text(size = 14)
+    plot.margin = margin(5.5, 5.5, 14, 5.5, "pt")  # extra space to avoid clipping
   )
+
 
 # Show plot
 plot_fonnelop_data
@@ -248,8 +247,8 @@ plot_fonnelop_repeat <- ggplot(Fonnelop_data_with_total, aes(x = Concentration, 
   geom_jitter(width = 0.15, size = 2, alpha = 0.8, shape = 21, stroke = 0.3, colour = "black") +
   scale_fill_manual(values = c("Low" = "#C6DBEF", "Average" = "#6BAED6", "High" = "#2171B5")) +
   scale_y_continuous(
-    limits = c(0, 4),
-    breaks = seq(0, 4, by = 0.5)
+    limits = c(0,  4.2),
+    breaks = seq(0,  4.2, by = 0.5)
   ) +
   labs(x = "\nInput concentration", y = "DNA Quantity (ng)") +
   theme_bw() +
@@ -278,12 +277,12 @@ plot_B <- plot_fonnelop_repeat +
 
 # Combine plots with labels A and B
 pCombined_Fonnelop_pending <- ggarrange(plot_A, plot_B,
-                                       labels = c("A", "B"),
+                                       labels = c("(I)", "(II)"),
                                        ncol = 2, nrow = 1,
                                        align = "hv",
                                        common.legend = FALSE,
                                        font.label = list(size = 12, color = "black"),
-                                       hjust = -0.5, vjust = 1.2) +
+                                       hjust = 0, vjust = 1.2) +
   theme(plot.margin = margin(0, 0.5, 0, 0, "cm"))  # (Top, Right, Bottom, Left)
 
 # Add shared y-axis label
@@ -316,8 +315,8 @@ plot_Goray_data <- ggplot(Goray_data, aes(x = Hand, y = Total_DNA)) +
   geom_boxplot(width = 0.3, outlier.shape = NA, fill = "white", colour = "black") +  # now first
   geom_jitter(width = 0.15, size = 1.8, alpha = 0.6, colour = "grey30") +            # now second
   scale_y_continuous(
-    breaks = seq(0, 10, by = 2),
-    limits = c(0, 10)) +
+    breaks = seq(0, 10.2, by = 2),
+    limits = c(0, 10.2)) +
   labs(x = "\nHand",y = "DNA Quantity (ng)") +
   theme_bw() +
   theme(
@@ -383,8 +382,8 @@ plot_Goray_repeat <- ggplot(Goray_data_with_total, aes(x = Hand, y = Total_DNA))
   geom_boxplot(outlier.shape = NA, colour = "black", width = 0.6) +
   geom_jitter(width = 0.15, size = 1.8, alpha = 0.6, colour = "grey30") +
   scale_y_continuous(
-    breaks = seq(0, 10, by = 2),
-    limits = c(0, 10)) +
+    breaks = seq(0, 10.2, by = 2),
+    limits = c(0,10.2)) +
   labs(x = "\nHand", y = "DNA Quantity (ng)") +
   theme_bw() +
   theme(
@@ -444,12 +443,12 @@ plot_B <- plot_Goray_repeat +
 
 # Combine plots with labels A and B
 pCombined_Goray_pending <- ggarrange(plot_A, plot_B,
-                                        labels = c("A", "B"),
+                                        labels = c("(I)", "(II)"),
                                         ncol = 2, nrow = 1,
                                         align = "hv",
                                         common.legend = FALSE,
                                         font.label = list(size = 12, color = "black"),
-                                        hjust = -0.5, vjust = 1.2) +
+                                        hjust = -0.4, vjust = 1.2) +
   theme(plot.margin = margin(0, 0.5, 0, 0, "cm"))  # (Top, Right, Bottom, Left)
 
 # Add shared y-axis label
@@ -464,7 +463,7 @@ pCombined_Goray
 
 # Save the figure
 ggsave("./Results/Goray_combined_plot.png", pCombined_Goray,
-       width = 10, height = 5, dpi = 600, units = "in")
+       width = 10, height = 5, dpi = 900, units = "in")
 
 # ------------------------------------------------------------------------
 # Section 4: Meakin et al.
@@ -569,12 +568,12 @@ plot_B <- plot_Meakin_repeat +
 
 # Combine plots with labels A and B
 pCombined_Meakin_pending <- ggarrange(plot_A, plot_B,
-                                     labels = c("A", "B"),
+                                     labels = c("(I)", "(II)"),
                                      ncol = 2, nrow = 1,
                                      align = "hv",
                                      common.legend = FALSE,
                                      font.label = list(size = 12, color = "black"),
-                                     hjust = -0.5, vjust = 1.2) +
+                                     hjust = -0.3, vjust = 1.2) +
   theme(plot.margin = margin(0, 0.5, 0, 0, "cm"))  # (Top, Right, Bottom, Left)
 
 # Add shared y-axis label
@@ -589,7 +588,8 @@ pCombined_Meakin
 
 # Save the figure
 ggsave("./Results/Meakin_combined_plot.png", pCombined_Meakin,
-       width = 10, height = 5, dpi = 600, units = "in")
+       width = 10, height = 5, dpi = 900, units = "in")
+
 # ------------------------------------------------------------------------
 # Section 5: Daly et al.
 # ------------------------------------------------------------------------
@@ -617,8 +617,8 @@ plot_Daly_data <- ggplot(Daly_data, aes(x = Material, y = Mean_DNA_ng)) +
   geom_point(aes(x = 1.4, y = Max_DNA), shape = 95, size = 5) +
   
   scale_y_continuous(
-    limits = c(0, 15),
-    breaks = seq(0, 15, by = 0.5),
+    limits = c(0, 15.3),
+    breaks = seq(0, 15.3, by = 0.5),
     expand = expansion(mult = c(0, 0.05))
   ) +
   labs(
@@ -703,8 +703,8 @@ plot_Daly_repeat <- Daly_data_with_total %>%
   scale_fill_manual(values = c("Grey/Blue, woven" = "#377eb8", "Yellow, knitted" = "#FFD700")) +
   labs(y = "DNA Quantity (ng)", x = expression(paste("Current study", italic("")))) +
   scale_y_continuous(
-    limits = c(0, 15),
-    breaks = seq(0, 15, by = 0.5),
+    limits = c(0, 15.3),
+    breaks = seq(0, 15.3, by = 0.5),
     expand = expansion(mult = c(0, 0.05))) +
   theme_bw() +
   theme(
@@ -720,8 +720,6 @@ x <- plot_Daly_repeat+scale_y_break(c(2, 13))+
         axis.title.y.right = element_blank())
 x
 
-# Show plot
-plot_Daly_repeat
 
 # export data for supplementary information
 write.csv(Daly_data_with_total, "./Results/Daly_repeat_data.csv", row.names = FALSE)
@@ -741,12 +739,11 @@ plot_B
 pCombined_Daly_pending <- (plot_A | plot_B) +
   plot_layout(guides = "collect", axes = "collect") &
   theme(plot.margin = margin(0, 0, 0, 0, "cm"))
-
 pCombined_Daly_pending
 
 # Save the figure
 ggsave("./Results/Daly_combined_plot.png", pCombined_Daly_pending,
-       width = 10, height = 5, dpi = 600, units = "in")
+       width = 10, height = 5, dpi = 900, units = "in")
 
 # ------------------------------------------------------------------------
 # Section 6: Bowman et al.
@@ -759,8 +756,8 @@ plot_Bowman_data <- ggplot(Bowman_data, aes(x = Scenario, y = DNA_Quantity_ng)) 
   geom_boxplot(width = 0.3, outlier.shape = NA, fill = "white", colour = "black") +
   geom_jitter(width = 0.15, size = 1.8, alpha = 0.6, colour = "grey30") +
   scale_y_continuous(
-    breaks = seq(0, 6, by = 2),
-    limits = c(0, 6)
+    breaks = seq(0, 6.5, by = 2),
+    limits = c(0, 6.5)
   ) +
   labs(
     x = "\nScenario",
@@ -821,8 +818,8 @@ plot_Bowman_repeat <- ggplot(Bowman_data_with_total, aes(x = Contact, y = Total_
   geom_boxplot(outlier.shape = NA, colour = "black", width = 0.6) +
   geom_jitter(width = 0.15, size = 1.8, alpha = 0.6, colour = "grey30") +
   scale_y_continuous(
-    breaks = seq(0, 6, by = 2),
-    limits = c(0, 6)) +
+    breaks = seq(0, 6.5, by = 2),
+    limits = c(0, 6.5)) +
   labs(x = "\nScenario", y = "DNA Quantity (ng)") +
   theme_bw() +
   theme(
@@ -850,12 +847,12 @@ plot_B <- plot_Bowman_repeat +
 
 # Combine plots with labels A and B
 pCombined_Bowman_pending <- ggarrange(plot_A, plot_B,
-                                    labels = c("A", "B"),
+                                    labels = c("(I)", "(II)"),
                                     ncol = 2, nrow = 1,
                                     align = "hv",
                                     common.legend = FALSE,
                                     font.label = list(size = 12, color = "black"),
-                                    hjust = -0.5, vjust = 1.2) +
+                                    hjust = -0, vjust = 1.2) +
   theme(plot.margin = margin(0, 0, 0, 0, "cm"))  # (Top, Right, Bottom, Left)
 
 # Add shared y-axis label
@@ -870,7 +867,7 @@ pCombined_Bowman
 
 # Save the figure
 ggsave("./Results/Bowman_combined_plot.png", pCombined_Bowman,
-       width = 10, height = 5, dpi = 600, units = "in")
+       width = 10, height = 5, dpi = 900, units = "in")
 
 # ------------------------------------------------------------------------
 # Section 7: Thomasma and Foran
@@ -897,8 +894,8 @@ plot_Thomasma_data <- ggplot(Thomasma_data, aes(x = Participant, y = Total_DNA_n
   geom_errorbar(aes(ymin = Total_DNA_ng, ymax = Total_DNA_ng + Error_ng),
                 width = 0.2) +
   scale_y_continuous(
-    limits = c(0, 6),  # adjust depending on your data
-    breaks = seq(0, 6, by = 2),
+    limits = c(0, 6.5),  # adjust depending on your data
+    breaks = seq(0, 6.5, by = 2),
     expand = expansion(mult = c(0, 0.05))
   ) +
   labs(
@@ -960,8 +957,8 @@ plot_Thomasma_repeat <- Thomasma_data_with_total %>%
   geom_jitter(width = 0.15, alpha = 0.6, size = 1.5) +
   labs(y = "DNA Quantity (ng)", x = "\nParticipants") +
   scale_y_continuous(
-    limits = c(0, 6),
-    breaks = seq(0, 6, by = 2),
+    limits = c(0, 6.5),
+    breaks = seq(0, 6.5, by = 2),
     expand = expansion(mult = c(0, 0.05))) +
   theme_bw() +
   theme(
@@ -988,12 +985,12 @@ plot_B <- plot_Thomasma_repeat +
 
 # Combine plots with labels A and B
 pCombined_Thomasma_pending <- ggarrange(plot_A, plot_B,
-                                      labels = c("A", "B"),
+                                      labels = c("(I)", "(II)"),
                                       ncol = 2, nrow = 1,
                                       align = "hv",
                                       common.legend = FALSE,
                                       font.label = list(size = 12, color = "black"),
-                                      hjust = -0.5, vjust = 1.2) +
+                                      hjust = -0, vjust = 1.2) +
   theme(plot.margin = margin(0, 0.5, 0, 0, "cm"))  # (Top, Right, Bottom, Left)
 
 # Add shared y-axis label
@@ -1008,7 +1005,7 @@ pCombined_Thomasma
 
 # Save the figure
 ggsave("./Results/Thomasma_combined_plot.png", pCombined_Thomasma,
-       width = 10, height = 5, dpi = 600, units = "in")
+       width = 10, height = 5, dpi = 900, units = "in")
 
 # ------------------------------------------------------------------------
 # Section 8: Lim et al.
@@ -1032,8 +1029,8 @@ plot_Lim_data <- ggplot(Lim_data, aes(x = "", y = Total_DNA_ng)) +
   geom_boxplot(width = 0.3, outlier.shape = NA, fill = "white", colour = "black") +
   geom_jitter(width = 0.15, size = 1.8, alpha = 0.6, colour = "grey30") +
   scale_y_continuous(
-    breaks = seq(0, 4, by = 0.5),
-    limits = c(0, 4)
+    breaks = seq(0, 6, by = 1),
+    limits = c(0, 6)
   ) +
   labs(
     x = "Fingermarks",
@@ -1087,7 +1084,7 @@ plot_Lim_repeat <- ggplot(Lim_data_with_total, aes(x = "", y = Total_DNA)) +
   geom_boxplot(outlier.shape = NA, colour = "black", width = 0.6) +
   geom_jitter(width = 0.15, size = 1.8, alpha = 0.6, colour = "grey30") +
   scale_y_continuous(
-    breaks = seq(0, 6, by = 2),
+    breaks = seq(0, 6, by = 1),
     limits = c(0, 6)) +
   labs(x = "Fingermarks", y = "DNA Quantity (ng)") +
   theme_bw() +
@@ -1116,12 +1113,12 @@ plot_B <- plot_Lim_repeat +
 
 # Combine plots with labels A and B
 pCombined_Lim_pending <- ggarrange(plot_A, plot_B,
-                                      labels = c("A", "B"),
+                                      labels = c("(I)", "(II)"),
                                       ncol = 2, nrow = 1,
                                       align = "hv",
                                       common.legend = FALSE,
                                       font.label = list(size = 12, color = "black"),
-                                      hjust = -0.5, vjust = 1.2) +
+                                      hjust = -0, vjust = 1.2) +
   theme(plot.margin = margin(0, 0, 0, 0, "cm"))  # (Top, Right, Bottom, Left)
 
 # Add shared y-axis label
