@@ -1,14 +1,6 @@
 ###########################################################################
 
 # Application of synthetic touch DNA deposits in forensic research
-
-# Emma Hermannsdóttir(1), Virginie Galais(2), Alexander Gray(2), Chris Gannicliffe(3), Niamh Nic Daeid(2), Agnieszka Kuffel(2)*
-
-# (1) Department of Immunology, Genetics, and Pathology (IGP), Uppsala University, Uppsala, Sweden
-# (2) Leverhulme Research Centre for Forensic Science, Department of Science and Engineering, University of Dundee, Dundee, DD1 4HN, UK
-# (3) Scottish Police Authority Forensic Services, Aberdeen Laboratory, Aberdeen, AB24 5EQ, UK
-# * Correspondence: akuffel001@dundee.ac.uk 
-
 # Keywords: XXX
 
 # Website: https://github.com/LRCFS/
