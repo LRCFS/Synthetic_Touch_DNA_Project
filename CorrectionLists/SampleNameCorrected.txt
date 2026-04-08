@@ -284,3 +284,72 @@ A7	L	Op2	Index	Rep2		L_Op2_Index_Rep2
 A8	L	Op2	Middle	Rep2		L_Op2_Middle_Rep2
 A9	L	Op2	Ring	Rep2		L_Op2_Ring_Rep2
 A10	L	Op2	Little	Rep2		L_Op2_Little_Rep2
+P1 UH R1	Op1	unwashed	Right	Rep1		Op1_unwashed_Right_Rep1
+P1 UH R2	Op1	unwashed	Right	Rep2		Op1_unwashed_Right_Rep2
+P1 UH R3	Op1	unwashed	Right	Rep3		Op1_unwashed_Right_Rep3
+P1 UH L1	Op1	unwashed	Left	Rep1		Op1_unwashed_Left_Rep1
+P1 UH L2	Op1	unwashed	Left	Rep2		Op1_unwashed_Left_Rep2
+P1 UH L3	Op1	unwashed	Left	Rep3		Op1_unwashed_Left_Rep3
+P1 WH R1	Op1	washed	Right	Rep1		Op1_washed_Right_Rep1
+P1 WH R2	Op1	washed	Right	Rep2		Op1_washed_Right_Rep2
+P1 WH R3	Op1	washed	Right	Rep3		Op1_washed_Right_Rep3
+P1 WH L1	Op1	washed	Left	Rep1		Op1_washed_Left_Rep1
+P1 WH L2	Op1	washed	Left	Rep2		Op1_washed_Left_Rep2
+P1 WH L3	Op1	washed	Left	Rep3		Op1_washed_Left_Rep3
+P2 UH R1	Op2	unwashed	Right	Rep1		Op2_unwashed_Right_Rep1
+P2 UH R2	Op2	unwashed	Right	Rep2		Op2_unwashed_Right_Rep2
+P2 UH R3	Op2	unwashed	Right	Rep3		Op2_unwashed_Right_Rep3
+P2 UH L1	Op2	unwashed	Left	Rep1		Op2_unwashed_Left_Rep1
+P2 UH L2	Op2	unwashed	Left	Rep2		Op2_unwashed_Left_Rep2
+P2 UH L3	Op2	unwashed	Left	Rep3		Op2_unwashed_Left_Rep3
+P2 WH R1	Op2	washed	Right	Rep1		Op2_washed_Right_Rep1
+P2 WH R2	Op2	washed	Right	Rep2		Op2_washed_Right_Rep2
+P2 WH R3	Op2	washed	Right	Rep3		Op2_washed_Right_Rep3
+P2 WH L1	Op2	washed	Left	Rep1		Op2_washed_Left_Rep1
+P2 WH L2	Op2	washed	Left	Rep2		Op2_washed_Left_Rep2
+P2 WH L3	Op2	washed	Left	Rep3		Op2_washed_Left_Rep3
+200 1a L	200volume	Op1	Left	Rep1		200volume_Op1_Left_Rep1
+200 2a L	200volume	Op2	Left	Rep1		200volume_Op2_Left_Rep1
+200 3a L	200volume	Op3	Left	Rep1		200volume_Op3_Left_Rep1
+200 1a R	200volume	Op1	Right	Rep1		200volume_Op1_Right_Rep1
+200 2a R	200volume	Op2	Right	Rep1		200volume_Op2_Right_Rep1
+200 3a R	200volume	Op3	Right	Rep1		200volume_Op3_Right_Rep1
+200 1b L	200volume	Op1	Left	Rep2		200volume_Op1_Left_Rep2
+200 2b L	200volume	Op2	Left	Rep2		200volume_Op2_Left_Rep2
+200 3b L	200volume	Op3	Left	Rep2		200volume_Op3_Left_Rep2
+200 1b R	200volume	Op1	Right	Rep2		200volume_Op1_Right_Rep2
+200 2b R	200volume	Op2	Right	Rep2		200volume_Op2_Right_Rep2
+200 3b R	200volume	Op3	Right	Rep2		200volume_Op3_Right_Rep2
+300 1a L	300volume	Op1	Left	Rep1		300volume_Op1_Left_Rep1
+300 2a L	300volume	Op2	Left	Rep1		300volume_Op2_Left_Rep1
+300 3a L	300volume	Op3	Left	Rep1		300volume_Op3_Left_Rep1
+300 1a R	300volume	Op1	Right	Rep1		300volume_Op1_Right_Rep1
+300 2a R	300volume	Op2	Right	Rep1		300volume_Op2_Right_Rep1
+300 3a R	300volume	Op3	Right	Rep1		300volume_Op3_Right_Rep1
+300 1b L	300volume	Op1	Left	Rep2		300volume_Op1_Left_Rep2
+300 2b L	300volume	Op2	Left	Rep2		300volume_Op2_Left_Rep2
+300 3b L	300volume	Op3	Left	Rep2		300volume_Op3_Left_Rep2
+300 1b R	300volume	Op1	Right	Rep2		300volume_Op1_Right_Rep2
+300 2b R	300volume	Op2	Right	Rep2		300volume_Op2_Right_Rep2
+300 3b R	300volume	Op3	Right	Rep2		300volume_Op3_Right_Rep2
+400 1a L	400volume	Op1	Left	Rep1		400volume_Op1_Left_Rep1
+400 2a L	400volume	Op2	Left	Rep1		400volume_Op2_Left_Rep1
+400 3a L	400volume	Op3	Left	Rep1		400volume_Op3_Left_Rep1
+400 1a R	400volume	Op1	Right	Rep1		400volume_Op1_Right_Rep1
+400 2a R	400volume	Op2	Right	Rep1		400volume_Op2_Right_Rep1
+400 3a R	400volume	Op3	Right	Rep1		400volume_Op3_Right_Rep1
+400 1b L	400volume	Op1	Left	Rep2		400volume_Op1_Left_Rep2
+400 2b L	400volume	Op2	Left	Rep2		400volume_Op2_Left_Rep2
+400 3b L	400volume	Op3	Left	Rep2		400volume_Op3_Left_Rep2
+400 1b R	400volume	Op1	Right	Rep2		400volume_Op1_Right_Rep2
+400 2b R	400volume	Op2	Right	Rep2		400volume_Op2_Right_Rep2
+400 3b R	400volume	Op3	Right	Rep2		400volume_Op3_Right_Rep2
+C_L	ControlDTB	PoetschFonnelopGoray	Low			ControlDTB_PoetschFonnelopGoray_Low
+C_A	ControlDTB	PoetschFonnelopGoray	Medium			ControlDTB_PoetschFonnelopGoray_Medium
+C_H	ControlDTB	PoetschFonnelopGoray	High			ControlDTB_PoetschFonnelopGoray_High
+C_D_T	ControlDTB	DalyThomasma	Medium			ControlDTB_DalyThomasma_Medium
+C_M_L	ControlDTB	MeakinLim	Medium			ControlDTB_MeakinLim_Medium
+C_B	ControlDTB	Bowman	Medium			ControlDTB_Bowman_Medium
+C_L_2	ControlDTB	PoetschFonnelopGoray	Low2			ControlDTB_PoetschFonnelopGoray_Low2
+C_A_2	ControlDTB	PoetschFonnelopGoray	Medium2			ControlDTB_PoetschFonnelopGoray_Medium2
+C_H_2	ControlDTB	PoetschFonnelopGoray	High2			ControlDTB_PoetschFonnelopGoray_High2

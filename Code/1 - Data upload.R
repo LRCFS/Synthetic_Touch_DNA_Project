@@ -20,10 +20,138 @@
 # ------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------
-# Section 1: Data from study replication
+# Section 1: Data from Direct-to-buffer and Direct-to-swab tests
+# ------------------------------------------------------------------------
+# DB check files have 7 instrument metadata rows before the header
+# Only Well, Sample Name, and Quantity are extracted.
+trout_raw <- read_xls("Data/DTB and DTS experiments/DTBS_check_Trout.xls", skip = 7)
+mouse_raw <- read_xls("Data/DTB and DTS experiments/DTBS_check_Mouse.xls", skip = 7)
+
+prepare_db_raw <- function(df) {
+  df %>%
+    filter(Task == "UNKNOWN",
+           !is.na(`Sample Name`),
+           `Sample Name` != "B",
+           `Cт` != "Undetermined") %>%
+    select(Well, `Sample Name`, `Target Name`, Quantity)
+}
+
+trout_unk <- prepare_db_raw(trout_raw)
+mouse_unk <- prepare_db_raw(mouse_raw)
+
+# ------------------------------------------------------------------------
+# Section 2: Data from preliminary study - Hand washing
 # ------------------------------------------------------------------------
 # Specify the folder path
-folder_path <- "Data/Studies"
+folder_path <- "Data/Preliminary experiments/Hands washing"
+
+# Get the list of .xls files in the folder
+file_list <- list.files(path = folder_path, pattern = "*.xls", full.names = TRUE)
+
+# Initialise an empty list to store dataframes
+df_list <- list()
+
+# Loop through each file, read the file, and remove the first 6 rows (header)
+for (file in file_list) {
+  # Read the file and skip the first 7 rows
+  data <- read_xls(file, skip = 7)
+  
+  # Append the dataframe to the list
+  df_list[[length(df_list) + 1]] <- data
+}
+
+# Combine all dataframes in the list into one dataframe using bind_rows
+merged_data <- bind_rows(df_list)
+
+# Replace names of Samples
+CorrectionSample <- read.csv("CorrectionLists/SampleNameCorrected.txt", sep = "\t", header = TRUE)
+CorrectionSample <- as.data.frame(CorrectionSample)
+merged_data$`Sample Name corrected` <- gsr(as.character(merged_data$`Sample Name`),as.character(CorrectionSample$Name),as.character(CorrectionSample$NameCorrected))
+
+# Sort the data by the 'Sample Name' column
+sorted_filtered_data <- merged_data %>% arrange(`Sample Name corrected`)
+
+# Select the columns of interest
+sorted_data <- sorted_filtered_data %>%
+  select(`Sample Name`,`Sample Name corrected`,"Well", "Cт", `Target Name`, "Quantity", "Task")
+
+# Create a new dataframe for rows with "STANDARD" in the Task column
+Standard <- sorted_data %>%
+  filter(Task == "STANDARD")
+
+# Remove rows with "STANDARD" or "NTC" in the Task column
+Data_preliminary_HWashing <- sorted_data %>%
+  filter(Task != "STANDARD" & Task != "NTC")
+
+# Remove rows with "STOCK" in Sample Name
+Data_preliminary_HWashing <- sorted_data %>%
+  filter(`Sample Name` != "STOCK 1" & `Sample Name` != "STOCK 2" & `Sample Name` != "STOCK 3")
+
+# Updated calculation for Quantity_Total based on Study volumes
+Data_preliminary_HWashing <- Data_preliminary_HWashing %>%
+  mutate(Quantity_Total = Quantity * 50)
+
+rm(data, df_list, merged_data, sorted_filtered_data, sorted_data)
+
+# ------------------------------------------------------------------------
+# Section 3: Data from preliminary study - Hand swab
+# ------------------------------------------------------------------------
+# Specify the folder path
+folder_path <- "Data/Preliminary experiments/Hands swabs"
+
+# Get the list of .xls files in the folder
+file_list <- list.files(path = folder_path, pattern = "*.xls", full.names = TRUE)
+
+# Initialise an empty list to store dataframes
+df_list <- list()
+
+# Loop through each file, read the file, and remove the first 6 rows (header)
+for (file in file_list) {
+  # Read the file and skip the first 7 rows
+  data <- read_xls(file, skip = 7)
+  
+  # Append the dataframe to the list
+  df_list[[length(df_list) + 1]] <- data
+}
+
+# Combine all dataframes in the list into one dataframe using bind_rows
+merged_data <- bind_rows(df_list)
+
+# Replace names of Samples
+CorrectionSample <- read.csv("CorrectionLists/SampleNameCorrected.txt", sep = "\t", header = TRUE)
+CorrectionSample <- as.data.frame(CorrectionSample)
+merged_data$`Sample Name corrected` <- gsr(as.character(merged_data$`Sample Name`),as.character(CorrectionSample$Name),as.character(CorrectionSample$NameCorrected))
+
+# Sort the data by the 'Sample Name' column
+sorted_filtered_data <- merged_data %>% arrange(`Sample Name corrected`)
+
+# Select the columns of interest
+sorted_data <- sorted_filtered_data %>%
+  select(`Sample Name`,`Sample Name corrected`,"Well", "Cт", `Target Name`, "Quantity", "Task")
+
+# Create a new dataframe for rows with "STANDARD" in the Task column
+Standard <- sorted_data %>%
+  filter(Task == "STANDARD")
+
+# Remove rows with "STANDARD" or "NTC" in the Task column
+Data_preliminary_HSwab <- sorted_data %>%
+  filter(Task != "STANDARD" & Task != "NTC")
+
+# Remove rows with "STOCK" in Sample Name
+Data_preliminary_HSwab <- sorted_data %>%
+  filter(`Sample Name` != "200 C" & `Sample Name` != "300 C" & `Sample Name` != "400 C")
+
+# Updated calculation for Quantity_Total based on Study volumes
+Data_preliminary_HSwab <- Data_preliminary_HSwab %>%
+  mutate(Quantity_Total = Quantity * 50)
+
+rm(data, df_list, merged_data, sorted_filtered_data, sorted_data)
+
+# ------------------------------------------------------------------------
+# Section 4-1: Data from study replication
+# ------------------------------------------------------------------------
+# Specify the folder path
+folder_path <- "Data/Current study data/"
 
 # Get the list of .xls files in the folder
 file_list <- list.files(path = folder_path, pattern = "*.xls", full.names = TRUE)
@@ -34,7 +162,7 @@ df_list <- list()
 # Loop through each file, read the file, and remove the first 6 rows (header)
 for (file in file_list) {
   # Read the file and skip the first 6 rows
-  data <- read_xls(file, skip = 6)
+  data <- read_xls(file, skip = 7)
   
   # Append the dataframe to the list
   df_list[[length(df_list) + 1]] <- data
@@ -59,6 +187,10 @@ sorted_data <- sorted_filtered_data %>%
 Standard <- sorted_data %>%
   filter(Task == "STANDARD")
 
+# Create a new dataframe for rows with "Control" in the Study column
+ControlDTB <- sorted_data %>%
+  filter(Study == "Control")
+
 # Remove rows with "STANDARD" or "NTC" in the Task column
 Data <- sorted_data %>%
   filter(Task != "STANDARD" & Task != "NTC")
@@ -72,9 +204,8 @@ Data <- Data %>%
 
 rm(data, df_list, merged_data, sorted_filtered_data, sorted_data)
 
-
 # ------------------------------------------------------------------------
-# Section 2: Create dataframes for analysis
+# Section 4-2: Create dataframes for analysis
 # ------------------------------------------------------------------------
 # Remove rows where 'Cт' column has "Undetermined"
 Data <- Data %>%
@@ -93,3 +224,4 @@ Meakin_repeat <- data_by_study[["Meakin"]]
 Daly_repeat <- data_by_study[["Daly"]]
 Lim_repeat <- data_by_study[["Lim"]]
 Bowman_repeat <- data_by_study[["Bowman"]]
+

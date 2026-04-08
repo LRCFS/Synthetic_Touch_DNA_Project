@@ -1,5 +1,5 @@
 ##########################################################################
-#####                      Data analysis washes                      #####
+#####                         Data analysis                          #####
 ##########################################################################
 
 # ------------------------------------------------------------------------
@@ -25,14 +25,13 @@
 #   Section 8 – Lim et al.
 #
 # Output: Cleaned datasets (.csv) and high-resolution combined figures (.png)
-# ------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------
 # Section 1: Poetsch et al.
 # ------------------------------------------------------------------------
 #### Data from the article ####
 # Load the Excel file
-Poetsch_data <- read.table("./Data/Approximate_Poetsch_dna_quantities.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
+Poetsch_data <- read.table("./Data/Original studies data/Approximate_Poetsch_dna_quantities.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
 
 # Reorder factor levels for Age_Group
 Poetsch_data$Age_Group <- factor(Poetsch_data$Age_Group, levels = c(
@@ -60,12 +59,6 @@ plot_Poetsch_data <- ggplot(Poetsch_data, aes(x = Age_Group, y = DNA_qt)) +
 plot_Poetsch_data
 
 #### Repeated data with Proxy ####
-# Remove rows with unused data
-Poetsch_repeat <- Poetsch_repeat %>%
-  filter(`Sample Name` != "LH" & `Sample Name` != "LH_1" & `Sample Name` != "LH_2"
-         & `Sample Name` != "RH" & `Sample Name` != "RH_1" & `Sample Name` != "RH_2"
-         & `Sample Name` != "C")
-
 # Select the columns of interest
 Poetsch_repeat <- Poetsch_repeat %>%
   select(`Sample Name`=`Sample Name corrected`, `Target Name`, "Quantity_Total","Study")
@@ -91,7 +84,7 @@ Poetsch_data_renamed <- Poetsch_data_averaged %>%
 Poetsch_data_renamed <- Poetsch_data_renamed %>%
   mutate(Concentration = recode(Concentration,
                                 "L" = "Low",
-                                "A" = "Average",
+                                "A" = "Medium",
                                 "H" = "High",))
 
 # Calculate total DNA quantity per row per hand
@@ -103,9 +96,15 @@ Poetsch_data_with_total <- Poetsch_data_renamed %>%
     Total_DNA = Cell_DNA + Cell_free_DNA
   )
 
-# force the x-axis (Concentration) to appear in the order Low, Average, High instead of alphabetical (A, H, L)
+# Calculate ratio between cfDNA and cDNA
+Poetsch_data_with_total$Ratio <- Poetsch_data_with_total$Cell_DNA/Poetsch_data_with_total$Cell_free_DNA
+mean(Poetsch_data_with_total$Ratio[
+  is.finite(Poetsch_data_with_total$Ratio)
+])
+
+# force the x-axis (Concentration) to appear in the order Low, Medium, High instead of alphabetical (A, H, L)
 Poetsch_data_with_total <- Poetsch_data_with_total %>%
-  mutate(Concentration = factor(Concentration, levels = c("Low", "Average", "High")))
+  mutate(Concentration = factor(Concentration, levels = c("Low", "Medium", "High")))
 
 # Plot repeated data as a boxplot
 plot_Poetsch_repeat <- Poetsch_data_with_total %>%
@@ -167,7 +166,7 @@ ggsave("./Results/Poetsch_combined_plot.png", pCombined_Poetsch,
 # Section 2: Fonnelop et al.
 # ------------------------------------------------------------------------
 #### Data from the article ####
-fonnelop_data <- read_csv("./Data/Approximate_fonnelop_dna_quantities.csv") %>%
+fonnelop_data <- read_csv("./Data/Original studies data/Approximate_fonnelop_dna_quantities.csv") %>%
   mutate(Study = "Fonnelop et al.") %>%
   rename(Total_DNA = Quantity)
 
@@ -196,10 +195,6 @@ plot_fonnelop_data <- ggplot(fonnelop_data, aes(x = "Fonnelop", y = Total_DNA)) 
 plot_fonnelop_data
 
 #### Repeated data with Proxy ####
-# Remove rows with unused data
-Fonnelop_repeat <- Fonnelop_repeat %>%
-  filter(`Sample Name` != "LH_3" & `Sample Name` != "RH_3" & `Sample Name` != "C_2" & `Sample Name` != "C")
-
 # Select the columns of interest
 Fonnelop_repeat <- Fonnelop_repeat %>%
   select(`Sample Name`=`Sample Name corrected`, `Target Name`, "Quantity_Total","Study")
@@ -225,7 +220,7 @@ Fonnelop_data_renamed <- Fonnelop_data_averaged %>%
 Fonnelop_data_renamed <- Fonnelop_data_renamed %>%
   mutate(Concentration = recode(Concentration,
                                 "L" = "Low",
-                                "A" = "Average",
+                                "A" = "Medium",
                                 "H" = "High",))
 
 # Calculate total DNA quantity per row per hand
@@ -237,15 +232,21 @@ Fonnelop_data_with_total <- Fonnelop_data_renamed %>%
     Total_DNA = Cell_DNA + Cell_free_DNA
   )
 
-# force the x-axis (Concentration) to appear in the order Low, Average, High instead of alphabetical (A, H, L)
+# Calculate ratio between cfDNA and cDNA
+Fonnelop_data_with_total$Ratio <- Fonnelop_data_with_total$Cell_DNA/Fonnelop_data_with_total$Cell_free_DNA
+mean(Fonnelop_data_with_total$Ratio[
+  is.finite(Fonnelop_data_with_total$Ratio)
+])
+
+# force the x-axis (Concentration) to appear in the order Low, Medium, High instead of alphabetical (A, H, L)
 Fonnelop_data_with_total <- Fonnelop_data_with_total %>%
-  mutate(Concentration = factor(Concentration, levels = c("Low", "Average", "High")))
+  mutate(Concentration = factor(Concentration, levels = c("Low", "Medium", "High")))
 
 # Plot repeated data
 plot_fonnelop_repeat <- ggplot(Fonnelop_data_with_total, aes(x = Concentration, y = Total_DNA, fill = Concentration)) +
   geom_boxplot(outlier.shape = NA, colour = "black", width = 0.6) +
   geom_jitter(width = 0.15, size = 2, alpha = 0.8, shape = 21, stroke = 0.3, colour = "black") +
-  scale_fill_manual(values = c("Low" = "#C6DBEF", "Average" = "#6BAED6", "High" = "#2171B5")) +
+  scale_fill_manual(values = c("Low" = "#C6DBEF", "Medium" = "#6BAED6", "High" = "#2171B5")) +
   scale_y_continuous(
     limits = c(0,  4.2),
     breaks = seq(0,  4.2, by = 0.5)
@@ -303,7 +304,7 @@ ggsave("./Results/Fonnelop_combined_plot.png", pCombined_Fonnelop,
 # Section 3: Goray et al.
 # ------------------------------------------------------------------------
 #### Data from the article ####
-Goray_data <- read_csv("./Data/Goray_tidy_data.csv") %>%
+Goray_data <- read_csv("./Data/Original studies data/Goray_tidy_data.csv") %>%
   mutate(Study = "Goray et al.") %>%
   rename(Total_DNA = Quantity)
 
@@ -361,7 +362,7 @@ Goray_data_renamed <- Goray_data_averaged %>%
 Goray_data_renamed <- Goray_data_renamed %>%
   mutate(Concentration = recode(Concentration,
                                 "L" = "Low",
-                                "A" = "Average",
+                                "A" = "Medium",
                                 "H" = "High",))
 
 # Calculate total DNA quantity per row per hand
@@ -373,9 +374,15 @@ Goray_data_with_total <- Goray_data_renamed %>%
     Total_DNA = Cell_DNA + Cell_free_DNA
   )
 
-# force the x-axis (Concentration) to appear in the order Low, Average, High instead of alphabetical (A, H, L)
+# Calculate ratio between cfDNA and cDNA
+Goray_data_with_total$Ratio <- Goray_data_with_total$Cell_DNA/Goray_data_with_total$Cell_free_DNA
+mean(Goray_data_with_total$Ratio[
+  is.finite(Goray_data_with_total$Ratio)
+])
+
+# force the x-axis (Concentration) to appear in the order Low, Medium, High instead of alphabetical (A, H, L)
 Goray_data_with_total <- Goray_data_with_total %>%
-  mutate(Concentration = factor(Concentration, levels = c("Low", "Average", "High")))
+  mutate(Concentration = factor(Concentration, levels = c("Low", "Medium", "High")))
 
 # Plot repeated data
 plot_Goray_repeat <- ggplot(Goray_data_with_total, aes(x = Hand, y = Total_DNA)) +
@@ -469,7 +476,7 @@ ggsave("./Results/Goray_combined_plot.png", pCombined_Goray,
 # Section 4: Meakin et al.
 # ------------------------------------------------------------------------
 #### Data from the article ####
-Meakin_data <- read_csv("./Data/Approximate_Meakin_dna_quantities.csv")
+Meakin_data <- read_csv("./Data/Original studies data/Approximate_Meakin_dna_quantities.csv")
 
 # Plot
 plot_Meakin_data <- ggplot(Meakin_data, aes(x = Participants, y = Total_DNA)) +
@@ -524,6 +531,12 @@ Meakin_data_with_total <- Meakin_data_renamed %>%
     Cell_free_DNA = replace_na(Cell_free_DNA, 0),
     Total_DNA = Cell_DNA + Cell_free_DNA
   )
+
+# Calculate ratio between cfDNA and cDNA
+Meakin_data_with_total$Ratio <- Meakin_data_with_total$Cell_DNA/Meakin_data_with_total$Cell_free_DNA
+mean(Meakin_data_with_total$Ratio[
+  is.finite(Meakin_data_with_total$Ratio)
+])
 
 # Plot repeated data as a boxplot
 plot_Meakin_repeat <- Meakin_data_with_total %>%
@@ -671,6 +684,13 @@ Daly_data_with_total <- Daly_data_renamed %>%
     Total_DNA = Cell_DNA + Cell_free_DNA
   )
 
+
+# Calculate ratio between cfDNA and cDNA
+Daly_data_with_total$Ratio <- Daly_data_with_total$Cell_DNA/Daly_data_with_total$Cell_free_DNA
+mean(Daly_data_with_total$Ratio[
+  is.finite(Daly_data_with_total$Ratio)
+])
+
 # Clean textile labels
 Daly_data_with_total <- Daly_data_with_total %>%
   mutate(Textile_Group = recode(Textile,
@@ -749,7 +769,7 @@ ggsave("./Results/Daly_combined_plot.png", pCombined_Daly_pending,
 # Section 6: Bowman et al.
 # ------------------------------------------------------------------------
 #### Data from the article ####
-Bowman_data <- read_csv("./Data/Bowman_dna_quantities.csv")
+Bowman_data <- read_csv("./Data/Original studies data/Bowman_dna_quantities.csv")
 
 # Plot
 plot_Bowman_data <- ggplot(Bowman_data, aes(x = Scenario, y = DNA_Quantity_ng)) +
@@ -804,6 +824,12 @@ Bowman_data_with_total <- Bowman_data_renamed %>%
     Cell_free_DNA = replace_na(Cell_free_DNA, 0),
     Total_DNA = Cell_DNA + Cell_free_DNA
   )
+
+# Calculate ratio between cfDNA and cDNA
+Bowman_data_with_total$Ratio <- Bowman_data_with_total$Cell_DNA/Bowman_data_with_total$Cell_free_DNA
+mean(Bowman_data_with_total$Ratio[
+  is.finite(Bowman_data_with_total$Ratio)
+])
 
 Bowman_data_with_total <- Bowman_data_with_total %>%
   mutate(Contact = recode(Contact,
@@ -873,7 +899,7 @@ ggsave("./Results/Bowman_combined_plot.png", pCombined_Bowman,
 # Section 7: Thomasma and Foran
 # ------------------------------------------------------------------------
 #### Data from the article ####
-Thomasma_data <- read_csv("./Data/Approximate_Thomasma_dna_quantities.csv")
+Thomasma_data <- read_csv("./Data/Original studies data/Approximate_Thomasma_dna_quantities.csv")
 
 # Define elution volume in μL from Thomasma and Foran
 elution_volume <- 20
@@ -942,6 +968,12 @@ Thomasma_data_with_total <- Thomasma_data_renamed %>%
     Cell_free_DNA = replace_na(Cell_free_DNA, 0),
     Total_DNA = Cell_DNA + Cell_free_DNA
   )
+
+# Calculate ratio between cfDNA and cDNA
+Thomasma_data_with_total$Ratio <- Thomasma_data_with_total$Cell_DNA/Thomasma_data_with_total$Cell_free_DNA
+mean(Thomasma_data_with_total$Ratio[
+  is.finite(Thomasma_data_with_total$Ratio)
+])
 
 # Rename Target Name values
 Thomasma_data_with_total <- Thomasma_data_with_total %>%
@@ -1012,7 +1044,7 @@ ggsave("./Results/Thomasma_combined_plot.png", pCombined_Thomasma,
 # ------------------------------------------------------------------------
 #### Data from the article ####
 # Load the data
-Lim_data <- read_csv("./Data/Lim_dna_quantities.csv")
+Lim_data <- read_csv("./Data/Original studies data/Lim_dna_quantities.csv")
 
 # Define elution volume in μL
 elution_volume <- 20
@@ -1078,6 +1110,11 @@ Lim_data_with_total <- Lim_data_renamed %>%
     Total_DNA = Cell_DNA + Cell_free_DNA
   )
 
+# Calculate ratio between cfDNA and cDNA
+Lim_data_with_total$Ratio <- Lim_data_with_total$Cell_DNA/Lim_data_with_total$Cell_free_DNA
+mean(Lim_data_with_total$Ratio[
+  is.finite(Lim_data_with_total$Ratio)
+])
 
 # Plot repeated data
 plot_Lim_repeat <- ggplot(Lim_data_with_total, aes(x = "", y = Total_DNA)) +
@@ -1134,3 +1171,4 @@ pCombined_Lim
 # Save the figure
 ggsave("./Results/Lim_combined_plot.png", pCombined_Lim,
        width = 10, height = 5, dpi = 600, units = "in")
+

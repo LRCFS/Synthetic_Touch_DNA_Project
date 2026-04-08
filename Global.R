@@ -1,7 +1,6 @@
 ###########################################################################
 
 # Application of synthetic touch DNA deposits in forensic research
-# Keywords: XXX
 
 # Website: https://github.com/LRCFS/
 # Contact: lrc@dundee.ac.uk
@@ -75,4 +74,6 @@ source("Functions/SearchAndReplace.R")
 #############################################################
 # This codes can be run subsequently
 source("Code/1 - Data upload.R")
-source("Code/2 - Data Analysis samples.R")
+source("Code/2 - Data Analysis DTB-DTS.R")
+source("Code/3 - Data Analysis preliminary experiments.R")
+source("Code/4 - Data Analysis samples.R")
