@@ -379,25 +379,26 @@ ggsave("./Results/DTBS_check_recovery_pct_mixed.png", plot_pct_mixed,
        width = 8, height = 5, dpi = 600, units = "in")
 
 # ------------------------------------------------------------------------
-# Section 8: statistical analysis of DTB/DTS control data
+# Section 9: statistical analysis of DTB/DTS control data
 # ------------------------------------------------------------------------
 
-# Prepare replicate-level data
+# 9.1 Prepare replicate-level data
 stats_df <- all_wide %>%
   mutate(
     Route = factor(Route, levels = c("Buffer", "Swab")),
+    Condition = paste(Species, DNA_type, Nominal_ng, "ng", sep = " | "),
     Recovery_pct = Total_DNA / Nominal_ng * 100
   ) %>%
-  arrange(Species, DNA_type, desc(Nominal_ng), Route)
+  arrange(Species, DNA_type, Nominal_ng, Route)
 
 # ------------------------------------------------------------------------
-# 8.1 Descriptive statistics by route
+# 9.2 Descriptive statistics by route
 # ------------------------------------------------------------------------
 
 db_descriptive_stats <- stats_df %>%
   group_by(Species, DNA_type, Nominal_ng, Route) %>%
-  summarise(
-    n = n(),
+  dplyr::summarise(
+    n = dplyr::n(),
     mean_ng = mean(Total_DNA, na.rm = TRUE),
     sd_ng = sd(Total_DNA, na.rm = TRUE),
     median_ng = median(Total_DNA, na.rm = TRUE),
@@ -409,8 +410,6 @@ db_descriptive_stats <- stats_df %>%
   ) %>%
   arrange(DNA_type, Species, desc(Nominal_ng), Route)
 
-db_descriptive_stats
-
 write.csv(
   db_descriptive_stats,
   "./Results/DTBS_check_descriptive_stats_by_route.csv",
@@ -418,72 +417,212 @@ write.csv(
 )
 
 # ------------------------------------------------------------------------
-# 8.2 Statistical comparison between Buffer and Swab
+# 9.3 Exploratory statistics by condition
 # ------------------------------------------------------------------------
 
-analyse_dtbs_condition <- function(df) {
+conditions <- stats_df %>%
+  distinct(Species, DNA_type, Nominal_ng) %>%
+  arrange(DNA_type, Species, desc(Nominal_ng))
+
+results_list <- list()
+
+for (i in seq_len(nrow(conditions))) {
   
-  buffer_vals <- df %>%
+  this_species <- conditions$Species[i]
+  this_dna     <- conditions$DNA_type[i]
+  this_nominal <- conditions$Nominal_ng[i]
+  
+  df_condition <- stats_df %>%
+    filter(
+      Species == this_species,
+      DNA_type == this_dna,
+      Nominal_ng == this_nominal
+    )
+  
+  buffer_vals <- df_condition %>%
     filter(Route == "Buffer") %>%
     pull(Total_DNA)
   
-  swab_vals <- df %>%
+  swab_vals <- df_condition %>%
     filter(Route == "Swab") %>%
     pull(Total_DNA)
   
-  shapiro_buffer_p <- if (length(buffer_vals) >= 3) shapiro.test(buffer_vals)$p.value else NA_real_
-  shapiro_swab_p   <- if (length(swab_vals) >= 3) shapiro.test(swab_vals)$p.value else NA_real_
+  # Basic descriptives
+  n_buffer <- length(buffer_vals)
+  n_swab   <- length(swab_vals)
   
-  both_normal <- !is.na(shapiro_buffer_p) &&
-    !is.na(shapiro_swab_p) &&
-    shapiro_buffer_p > 0.05 &&
-    shapiro_swab_p > 0.05
+  mean_buffer <- if (n_buffer > 0) mean(buffer_vals, na.rm = TRUE) else NA_real_
+  mean_swab   <- if (n_swab > 0) mean(swab_vals, na.rm = TRUE) else NA_real_
   
-  if (both_normal) {
-    variance_test <- "F test"
-    variance_out <- var.test(buffer_vals, swab_vals)
-    variance_p <- variance_out$p.value
+  sd_buffer <- if (n_buffer > 1) sd(buffer_vals, na.rm = TRUE) else NA_real_
+  sd_swab   <- if (n_swab > 1) sd(swab_vals, na.rm = TRUE) else NA_real_
+  
+  # Defaults
+  shapiro_buffer_W <- NA_real_
+  shapiro_buffer_p <- NA_real_
+  shapiro_swab_W   <- NA_real_
+  shapiro_swab_p   <- NA_real_
+  
+  variance_test      <- NA_character_
+  variance_statistic <- NA_real_
+  variance_p         <- NA_real_
+  
+  location_test      <- NA_character_
+  location_statistic <- NA_real_
+  location_p         <- NA_real_
+  
+  note_parts <- c()
+  
+  # If one route is missing, return empty test results
+  if (n_buffer == 0 || n_swab == 0) {
     
-    if (variance_p > 0.05) {
-      location_test <- "Student t-test"
-      test_out <- t.test(buffer_vals, swab_vals, var.equal = TRUE)
-    } else {
-      location_test <- "Welch t-test"
-      test_out <- t.test(buffer_vals, swab_vals, var.equal = FALSE)
-    }
+    note_parts <- c(note_parts, "Condition missing one route")
     
   } else {
-    variance_test <- NA_character_
-    variance_p <- NA_real_
-    location_test <- "Wilcoxon rank-sum test"
-    test_out <- wilcox.test(buffer_vals, swab_vals, exact = FALSE)
+    
+    # --------------------------------------------------
+    # Shapiro: Buffer
+    # --------------------------------------------------
+    if (n_buffer < 3) {
+      note_parts <- c(note_parts, "Buffer: n < 3")
+    } else if (length(unique(buffer_vals[is.finite(buffer_vals)])) < 3) {
+      note_parts <- c(note_parts, "Buffer: Too few unique values for Shapiro-Wilk")
+    } else {
+      shapiro_out <- tryCatch(shapiro.test(buffer_vals), error = function(e) NULL)
+      if (is.null(shapiro_out)) {
+        note_parts <- c(note_parts, "Buffer: Shapiro-Wilk failed")
+      } else {
+        shapiro_buffer_W <- unname(shapiro_out$statistic)
+        shapiro_buffer_p <- shapiro_out$p.value
+      }
+    }
+    
+    # --------------------------------------------------
+    # Shapiro: Swab
+    # --------------------------------------------------
+    if (n_swab < 3) {
+      note_parts <- c(note_parts, "Swab: n < 3")
+    } else if (length(unique(swab_vals[is.finite(swab_vals)])) < 3) {
+      note_parts <- c(note_parts, "Swab: Too few unique values for Shapiro-Wilk")
+    } else {
+      shapiro_out <- tryCatch(shapiro.test(swab_vals), error = function(e) NULL)
+      if (is.null(shapiro_out)) {
+        note_parts <- c(note_parts, "Swab: Shapiro-Wilk failed")
+      } else {
+        shapiro_swab_W <- unname(shapiro_out$statistic)
+        shapiro_swab_p <- shapiro_out$p.value
+      }
+    }
+    
+    both_normal <- !is.na(shapiro_buffer_p) &&
+      !is.na(shapiro_swab_p) &&
+      shapiro_buffer_p > 0.05 &&
+      shapiro_swab_p > 0.05
+    
+    # --------------------------------------------------
+    # Variance test
+    # --------------------------------------------------
+    if (both_normal) {
+      variance_test <- "F-test for equality of variances"
+      var_out <- tryCatch(var.test(buffer_vals, swab_vals), error = function(e) NULL)
+      
+      if (is.null(var_out)) {
+        note_parts <- c(note_parts, "Variance test: F-test failed")
+      } else {
+        variance_statistic <- unname(var_out$statistic)
+        variance_p <- var_out$p.value
+      }
+      
+    } else {
+      variance_test <- "Fligner-Killeen test"
+      var_out <- tryCatch(
+        fligner.test(df_condition$Total_DNA, df_condition$Route),
+        error = function(e) NULL
+      )
+      
+      if (is.null(var_out)) {
+        note_parts <- c(note_parts, "Variance test: Fligner-Killeen test failed")
+      } else {
+        variance_statistic <- unname(var_out$statistic)
+        variance_p <- var_out$p.value
+      }
+    }
+    
+    # --------------------------------------------------
+    # Location test
+    # --------------------------------------------------
+    if (both_normal) {
+      
+      equal_var_ok <- !is.na(variance_p) && variance_p > 0.05
+      
+      if (equal_var_ok) {
+        location_test <- "Student t-test"
+        loc_out <- tryCatch(
+          t.test(buffer_vals, swab_vals, var.equal = TRUE),
+          error = function(e) NULL
+        )
+      } else {
+        location_test <- "Welch t-test"
+        loc_out <- tryCatch(
+          t.test(buffer_vals, swab_vals, var.equal = FALSE),
+          error = function(e) NULL
+        )
+      }
+      
+      if (is.null(loc_out)) {
+        note_parts <- c(note_parts, "Location test: t-test failed")
+      } else {
+        location_statistic <- unname(loc_out$statistic)
+        location_p <- loc_out$p.value
+      }
+      
+    } else {
+      location_test <- "Wilcoxon rank-sum test"
+      loc_out <- tryCatch(
+        wilcox.test(buffer_vals, swab_vals, exact = FALSE),
+        error = function(e) NULL
+      )
+      
+      if (is.null(loc_out)) {
+        note_parts <- c(note_parts, "Location test: Wilcoxon test failed")
+      } else {
+        location_statistic <- unname(loc_out$statistic)
+        location_p <- loc_out$p.value
+      }
+    }
   }
   
-  tibble(
-    n_buffer = length(buffer_vals),
-    n_swab = length(swab_vals),
-    mean_buffer = mean(buffer_vals, na.rm = TRUE),
-    mean_swab = mean(swab_vals, na.rm = TRUE),
-    sd_buffer = sd(buffer_vals, na.rm = TRUE),
-    sd_swab = sd(swab_vals, na.rm = TRUE),
+  note_parts <- c(note_parts, "Exploratory analysis; group sizes shown in n_buffer and n_swab")
+  
+  results_list[[i]] <- tibble(
+    Species = this_species,
+    DNA_type = this_dna,
+    Nominal_ng = this_nominal,
+    n_buffer = n_buffer,
+    n_swab = n_swab,
+    mean_buffer = mean_buffer,
+    mean_swab = mean_swab,
+    sd_buffer = sd_buffer,
+    sd_swab = sd_swab,
+    shapiro_buffer_W = shapiro_buffer_W,
     shapiro_buffer_p = shapiro_buffer_p,
+    shapiro_swab_W = shapiro_swab_W,
     shapiro_swab_p = shapiro_swab_p,
     variance_test = variance_test,
+    variance_statistic = variance_statistic,
     variance_p = variance_p,
     location_test = location_test,
-    location_p = test_out$p.value,
-    note = "Exploratory analysis; n = 3 per route"
+    location_statistic = location_statistic,
+    location_p = location_p,
+    note = paste(note_parts, collapse = " | ")
   )
 }
 
-db_stats_results <- stats_df %>%
-  group_by(Species, DNA_type, Nominal_ng) %>%
-  group_modify(~ analyse_dtbs_condition(.x)) %>%
-  ungroup() %>%
-  mutate(sd_ratio_buffer_to_swab = sd_buffer / sd_swab) %>%
+db_stats_results <- bind_rows(results_list) %>%
+  mutate(
+    sd_ratio_buffer_to_swab = sd_buffer / sd_swab
+  ) %>%
   arrange(DNA_type, Species, desc(Nominal_ng))
-
-db_stats_results
 
 write.csv(
   db_stats_results,
@@ -491,8 +630,10 @@ write.csv(
   row.names = FALSE
 )
 
+db_stats_results
+
 # ------------------------------------------------------------------------
-# 8.3 Holm correction
+# 9.4 Holm correction
 # ------------------------------------------------------------------------
 
 db_stats_results_adj <- db_stats_results %>%
@@ -501,16 +642,16 @@ db_stats_results_adj <- db_stats_results %>%
     location_p_holm = p.adjust(location_p, method = "holm")
   )
 
-db_stats_results_adj
-
 write.csv(
   db_stats_results_adj,
   "./Results/DTBS_check_exploratory_stats_adjusted.csv",
   row.names = FALSE
 )
 
+db_stats_results_adj
+
 # ------------------------------------------------------------------------
-# 8.4 Compact table for manuscript / SI
+# 9.5 Compact table for manuscript / SI
 # ------------------------------------------------------------------------
 
 db_stats_compact <- db_stats_results_adj %>%
@@ -533,10 +674,10 @@ db_stats_compact <- db_stats_results_adj %>%
     Note = note
   )
 
-db_stats_compact
-
 write.csv(
   db_stats_compact,
   "./Results/DTBS_check_exploratory_stats_compact.csv",
   row.names = FALSE
 )
+
+db_stats_compact
