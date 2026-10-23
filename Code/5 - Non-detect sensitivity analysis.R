@@ -71,11 +71,24 @@ samples <- targets %>%
     into = c("Code", "Operator", "Condition", "Hand", "Repeat"),
     sep = "_", remove = FALSE, extra = "merge", fill = "right"
   ) %>%
+  
   mutate(
-    Condition = recode(Condition, "L" = "Low", "A" = "Medium", "H" = "High"),
-    Hand = recode(Hand, "L" = "Left", "R" = "Right",
+    # Use the correct experimental condition for each study
+    Condition = case_when(
+      Study == "Bowman" & grepl("_3s$", sample_id) ~ "3s",
+      Study == "Bowman" & grepl("_15s$", sample_id) ~ "15s",
+      Study %in% c("Poetsch", "Fonnelop", "Goray") & Condition == "L" ~ "Low",
+      Study %in% c("Poetsch", "Fonnelop", "Goray") & Condition == "A" ~ "Medium",
+      Study %in% c("Poetsch", "Fonnelop", "Goray") & Condition == "H" ~ "High",
+      TRUE ~ Condition
+    ),
+    
+    # Preserve hand information for other experiments
+    Hand = recode(Hand,
+                  "L" = "Left", "R" = "Right",
                   "left" = "Left", "right" = "Right")
   )
+
 
 # Replace missing DNA quantities with 0 and recalculate total DNA
 samples <- samples %>%
@@ -153,8 +166,7 @@ goray_wilcoxon <- data.frame(
 # ------------------------------------------------------------------------
 write.csv(by_study, file.path(out_dir, "01_by_study.csv"), row.names = FALSE)
 write.csv(by_condition, file.path(out_dir, "02_by_condition.csv"), row.names = FALSE)
-write.csv(by_condition_hand, file.path(out_dir, "03_by_condition_hand.csv"), row.names = FALSE)
-write.csv(goray_wilcoxon, file.path(out_dir, "04_Goray_Wilcoxon.csv"), row.names = FALSE)
+write.csv(goray_wilcoxon, file.path(out_dir, "03_Goray_Wilcoxon.csv"), row.names = FALSE)
 
 print(by_study)
 print(by_condition %>% filter(Study == "Goray"))
