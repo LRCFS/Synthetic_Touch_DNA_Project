@@ -72,7 +72,11 @@ samples <- targets %>%
     sep = "_", remove = FALSE, extra = "merge", fill = "right"
   ) %>%
   mutate(
-    Condition = recode(Condition, "L" = "Low", "A" = "Medium", "H" = "High"),
+    Condition = if_else(
+      Study == "Meakin",
+      Condition,
+      recode(Condition, "L" = "Low", "A" = "Medium", "H" = "High")
+    ),
     Hand = recode(Hand, "L" = "Left", "R" = "Right",
                   "left" = "Left", "right" = "Right")
   )
@@ -153,8 +157,7 @@ goray_wilcoxon <- data.frame(
 # ------------------------------------------------------------------------
 write.csv(by_study, file.path(out_dir, "01_by_study.csv"), row.names = FALSE)
 write.csv(by_condition, file.path(out_dir, "02_by_condition.csv"), row.names = FALSE)
-write.csv(by_condition_hand, file.path(out_dir, "03_by_condition_hand.csv"), row.names = FALSE)
-write.csv(goray_wilcoxon, file.path(out_dir, "04_Goray_Wilcoxon.csv"), row.names = FALSE)
+write.csv(goray_wilcoxon, file.path(out_dir, "03_Goray_Wilcoxon.csv"), row.names = FALSE)
 
 print(by_study)
 print(by_condition %>% filter(Study == "Goray"))
