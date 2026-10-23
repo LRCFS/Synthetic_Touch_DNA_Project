@@ -1,3 +1,4 @@
+
 Name						NameCorrected
 1	P	Op1	H	L	Rep1	P_Op1_H_L_Rep1
 2	P	Op1	H	R	Rep1	P_Op1_H_R_Rep1
@@ -206,12 +207,12 @@ AG_L2	D	Op2	Grey-blue	left	Rep2	D_Op2_Grey-blue_left_Rep2
 AG_R2	D	Op2	Grey-blue	right	Rep2	D_Op2_Grey-blue_right_Rep2
 VY_L1	D	Op3	Yellow	left	Rep1	D_Op3_Yellow_left_Rep1
 VY_R1	D	Op3	Yellow	right	Rep1	D_Op3_Yellow_right_Rep1
-VG_L2	D	Op3	Yellow	left	Rep2	D_Op3_Yellow_left_Rep2
-VG_R2	D	Op3	Yellow	right	Rep2	D_Op3_Yellow_right_Rep2
-VY_L2	D	Op3	Grey-blue	left	Rep1	D_Op3_Grey-blue_left_Rep1
-VY_R2	D	Op3	Grey-blue	right	Rep1	D_Op3_Grey-blue_right_Rep1
-VG_L1	D	Op3	Grey-blue	left	Rep2	D_Op3_Grey-blue_left_Rep2
-VG_R1	D	Op3	Grey-blue	right	Rep2	D_Op3_Grey-blue_right_Rep2
+VG_L2	D	Op3	Grey-blue	left	Rep2	D_Op3_Grey-blue_left_Rep2
+VG_R2	D	Op3	Grey-blue	right	Rep2	D_Op3_Grey-blue_right_Rep2
+VY_L2	D	Op3	Yellow	left	Rep2	D_Op3_Yellow_left_Rep2
+VY_R2	D	Op3	Yellow	right	Rep2	D_Op3_Yellow_right_Rep2
+VG_L1	D	Op3	Grey-blue	left	Rep1	D_Op3_Grey-blue_left_Rep1
+VG_R1	D	Op3	Grey-blue	right	Rep1	D_Op3_Grey-blue_right_Rep1
 E_L_1	B	Op1	left	Rep1	15s	B_Op1_left_Rep1_15s
 E_R_1	B	Op1	right	Rep1	3s	B_Op1_right_Rep1_3s
 E_L_2	B	Op1	left	Rep2	15s	B_Op1_left_Rep2_15s

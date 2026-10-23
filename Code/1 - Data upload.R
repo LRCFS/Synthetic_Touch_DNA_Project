@@ -68,6 +68,15 @@ CorrectionSample <- read.csv("CorrectionLists/SampleNameCorrected.txt", sep = "\
 CorrectionSample <- as.data.frame(CorrectionSample)
 merged_data$`Sample Name corrected` <- gsr(as.character(merged_data$`Sample Name`),as.character(CorrectionSample$Name),as.character(CorrectionSample$NameCorrected))
 
+# Check original sample names
+unique(merged_data$`Sample Name`)
+
+# Check which names are absent from the correction list
+setdiff(
+  unique(merged_data$`Sample Name`),
+  CorrectionSample$Name
+)
+
 # Sort the data by the 'Sample Name' column
 sorted_filtered_data <- merged_data %>% arrange(`Sample Name corrected`)
 
@@ -207,6 +216,9 @@ rm(data, df_list, merged_data, sorted_filtered_data, sorted_data)
 # ------------------------------------------------------------------------
 # Section 4-2: Create dataframes for analysis
 # ------------------------------------------------------------------------
+# Preserve undetermined qPCR results for the sensitivity analysis
+Data_with_non_detects <- Data
+
 # Remove rows where 'Cт' column has "Undetermined"
 Data <- Data %>%
   filter(Cт != "Undetermined")
