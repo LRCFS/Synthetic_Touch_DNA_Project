@@ -51,6 +51,7 @@ targets <- wells %>%
 # ------------------------------------------------------------------------
 # 3. Combine mouse and trout into one row per experimental sample
 # ------------------------------------------------------------------------
+
 samples <- targets %>%
   pivot_wider(
     names_from = target,
@@ -69,28 +70,37 @@ samples <- targets %>%
   separate(
     sample_id,
     into = c("Code", "Operator", "Condition", "Hand", "Repeat"),
-    sep = "_", remove = FALSE, extra = "merge", fill = "right"
+    sep = "_",
+    remove = FALSE,
+    extra = "merge",
+    fill = "right"
   ) %>%
-  
   mutate(
-    # Use the correct experimental condition for each study
+    # Apply study-specific experimental conditions
     Condition = case_when(
       Study == "Bowman" & grepl("_3s$", sample_id) ~ "3s",
       Study == "Bowman" & grepl("_15s$", sample_id) ~ "15s",
-      Study %in% c("Poetsch", "Fonnelop", "Goray") & Condition == "L" ~ "Low",
-      Study %in% c("Poetsch", "Fonnelop", "Goray") & Condition == "A" ~ "Medium",
-      Study %in% c("Poetsch", "Fonnelop", "Goray") & Condition == "H" ~ "High",
+      Study %in% c("Poetsch", "Fonnelop", "Goray") &
+        Condition == "L" ~ "Low",
+      Study %in% c("Poetsch", "Fonnelop", "Goray") &
+        Condition == "A" ~ "Medium",
+      Study %in% c("Poetsch", "Fonnelop", "Goray") &
+        Condition == "H" ~ "High",
       TRUE ~ Condition
     ),
     
-    # Preserve hand information for other experiments
-    Hand = recode(Hand,
-                  "L" = "Left", "R" = "Right",
-                  "left" = "Left", "right" = "Right")
+    # Standardise hand labels
+    Hand = recode(
+      Hand,
+      "L" = "Left",
+      "R" = "Right",
+      "left" = "Left",
+      "right" = "Right"
+    )
   )
 
-
-# Replace missing DNA quantities with 0 and recalculate total DNA
+# Replace missing DNA quantities with 0
+# and recalculate total DNA
 samples <- samples %>%
   mutate(
     amount_ng_Cell = replace_na(amount_ng_Cell, 0),
